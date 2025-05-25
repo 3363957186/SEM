@@ -38,6 +38,7 @@ pip install .
 
 <!-- # Training
 - Create a configuration file similar to ```dev/data/toml_files/stage_1.toml```, categorizing each feature as ```numerical```, ```categorical``` or ```imaging```. Please add the image embedding paths to your data file as another column and set the type of this feature as ```imaging``` in the configuration file. 
+- An example script to generate image embeddings is provided in ```image_embeddings/swin_embeds.py```. Please download the [checkpoint](https://github.com/Project-MONAI/MONAI-extra-test-data/releases/download/0.8.1/model_swinvit.pt) prior to using this script.
 - Navigate to the repository's root directory 
 - Add the correct training and validation data paths to ```dev/train.sh```. Demo data is provided for reference at ```pseudodata/```.
 - If training using MRI embeddings, set these flags in ```dev/train.sh``` (please add the image embedding paths to the data file before setting these flags) :
