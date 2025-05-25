@@ -1,3 +1,17 @@
+"""
+This script extracts embeddings from volumetric MRIs using a pretrained SwinUNETR model.
+
+Input:
+- T1 images: intensity-normalized FastSurfer processed images (orig_nu.mgz)
+- Non-T1 images: resampled SynthSeg processed images (*_resampled.nii)
+
+Data organization:
+- T1: {base_path}/{cohort}/processed/fastsurfer/{subject}/
+- Non-T1: {base_path}/{cohort}/processed/synthseg/{subject}/
+
+Output: whole-brain embeddings saved as .npy files
+"""
+
 import torch
 import numpy as np
 from torch.utils.data import Dataset, DataLoader
@@ -21,7 +35,7 @@ def get_rid_folder(cohort: str, modality: str = None, base_path: str = "/project
 
     Args:
         cohort (str): The name of the cohort.
-        modality (str, optional): The MRI modality (e.g., FLAIR, T1, etc.). Used for non-T1 modalities.
+        modality (str, optional): The MRI modality (e.g., FLAIR, T1, T2star etc.).
         base_path (str): The base directory where each cohort's data is stored.
 
     Returns:
