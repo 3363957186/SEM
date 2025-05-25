@@ -171,7 +171,7 @@ if __name__ == "__main__":
                     except Exception as e:
                         logging.error(f"Error processing embedding for RID {rid}: {e}")
                         print(e)
-                    break  # only process the single whole brain image
+                    break
                     
             except Exception as e:
                 logging.error(f"Error loading data for RID {rid}: {e}")
