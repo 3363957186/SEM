@@ -29,7 +29,7 @@ The tool was developed using the following dependencies:
 Please refer to `requirements.txt` for the complete list of dependencies.
 
 # Installation
-Follow these steps to install the package
+Follow these steps to install the package:
 ```
 conda create --name new_env --file requirements.txt
 conda activate new_env
@@ -107,6 +107,8 @@ pip install .
   python dev/generate_predictions.py
   ```
 
+- The inference time for our testing data is under 1 minute without GPU usage.
+  
 - The de-identified source data used to generate the plots is available at:
   ```
   figures/source_data/
