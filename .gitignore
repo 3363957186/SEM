@@ -188,3 +188,5 @@ radar_plots.png
 
 old/
 figures/source_data/efig1/image_embeddings/model_swinvit.pt
+figures/source_data/efig1/
+pseudocode.txt

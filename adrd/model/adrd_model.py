@@ -977,7 +977,7 @@ class ADRDModel(BaseEstimator):
                 else:
                     raise ValueError(f"Invalid stage {self.stage}")
                 
-                adrd_state_dict = torch.load(adrd_ckpt_path, map_location=torch.device('cuda'))
+                adrd_state_dict = torch.load(adrd_ckpt_path, map_location=torch.device(self.device))
                 if 'state_dict' in adrd_state_dict:
                     adrd_state_dict = adrd_state_dict['state_dict']
                 else:
