@@ -29,5 +29,4 @@ dependencies:
     - shap==0.46
     - python-louvain==0.16
     - matplotlib-inline==0.1.7
-    - nilearn==0.10.5
     - pycomplexheatmap==1.7.6
