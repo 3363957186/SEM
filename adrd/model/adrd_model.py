@@ -104,7 +104,8 @@ class ADRDModel(BaseEstimator):
         fine_tune: bool = True,
         wandb_project: str = "Pet_Project_test_consistency",
         early_stop_threshold: int = 15,
-        transfer_epoch: int = 15
+        transfer_epoch: int = 15,
+        stage_1_ckpt: str = "./dev/ckpt/model_stage_1.ckpt"
         
     ) -> None:  
         """Create a new ADRD model.
@@ -234,6 +235,7 @@ class ADRDModel(BaseEstimator):
         self.wandb_project=wandb_project
         self.early_stop_threshold = early_stop_threshold
         self.transfer_epoch = transfer_epoch
+        self.stage_1_ckpt = stage_1_ckpt
 
     @_manage_ctx_fit
     def fit(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None, img_mode=0) -> Self:
@@ -454,13 +456,19 @@ class ADRDModel(BaseEstimator):
         
         if self.fine_tune and self.stage == 1:
             if epoch < self.transfer_epoch:
+                frozen_cnt = 0
                 for name, param in self.net_.named_parameters():
                     if name in self.params_copied:
+                        frozen_cnt += 1
                         param.requires_grad = False  # Freeze these parameters
+                print(f"{frozen_cnt} Transformer parameters frozen")
             else:
+                unfrozen_cnt = 0
                 for name, param in self.net_.named_parameters():
                     if name in self.params_copied:
                         param.requires_grad = True
+                        unfrozen_cnt += 1
+                print(f"{unfrozen_cnt} Transformer parameters unfrozen")
         
         for n_iter, (x_batch, y_batch, mask, y_mask) in enumerate(ldr_trn):
             # mount data to the proper device
@@ -971,7 +979,7 @@ class ADRDModel(BaseEstimator):
                     adrd_ckpt_path = './nmedckpt/ckpt_swinunetr_stripped_MNI.pt'
                     print(f"Using adrd checkpoint for stage {self.stage}, {adrd_ckpt_path}")
                 elif self.stage == 2:
-                    adrd_ckpt_path = "./dev/ckpt/model_stage_1.ckpt"
+                    adrd_ckpt_path = self.stage_1_ckpt
                     
                     print(f"Using amyloid and tau checkpoint for stage {self.stage}, {adrd_ckpt_path}")
                 else:

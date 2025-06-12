@@ -110,10 +110,6 @@ class Transformer(torch.nn.Module):
                 # unrecognized
                 raise ValueError
             
-        # print(self.pe)
-        # for n,p in self.pe.named_parameters():
-        #     print(n, p.requires_grad)
-        # raise ValueError
 
     def forward(self,
         x: dict[str, Tensor],

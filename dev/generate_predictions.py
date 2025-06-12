@@ -241,20 +241,18 @@ class FilterImages:
 if __name__ == '__main__':
     fname = 'name_of_file' # the name of file you want to save the model predictions to
     save_path = f'path/to/model/predictions' # the path where the model predictions will be saved
-    # dat_file = 'path/to/test/data' # the test data path
-    # dat_file = 'path/to/vld/data' # the validation data path to caculate Youden Index
-    dat_file = "/projectnb/vkolagrp/varuna/mri_pet/adrd_tool/data_varuna/data/0225/ADNI_HABS_NACCTEST_HARMONIZED.csv"
-    vld_file = "/projectnb/vkolagrp/skowshik/pet_project/mri_pet/adrd_tool/data_varuna/data/0225/val_0225_new_harmonization.csv"
+    dat_file = 'path/to/test/data' # the test data path
+    vld_file = 'path/to/vld/data' # the validation data path to caculate Youden Index
 
     # Uncomment this for stage 1
-    # cnf_file = f'./data/toml_files/stage_1.toml' # the path configuration file
-    # ckpt_path = '../ckpt/model_stage_1.ckpt'
-    # labels = ['amy_label', 'tau_label']
+    cnf_file = f'./data/toml_files/stage_1_eval.toml' # the path configuration file
+    ckpt_path = '../ckpt/model_stage_1.ckpt'
+    labels = ['amy_label', 'tau_label']
 
     # Uncomment this for stage 2
-    cnf_file = f'./data/toml_files/stage_2.toml' # the path configuration file
-    ckpt_path = '../ckpt/model_stage_2.ckpt' # the path to the model checkpoint
-    labels = ['tau_medtemp_label', 'tau_lattemp_label','tau_medpar_label', 'tau_latpar_label', 'tau_front_label', 'tau_occ_label']
+    # cnf_file = f'./data/toml_files/stage_2_eval.toml' # the path configuration file
+    # ckpt_path = '../ckpt/model_stage_2.ckpt' # the path to the model checkpoint
+    # labels = ['tau_medtemp_label', 'tau_lattemp_label','tau_medpar_label', 'tau_latpar_label', 'tau_front_label', 'tau_occ_label']
 
     dat_file = pd.read_csv(dat_file)
     vld_file = pd.read_csv(vld_file)
@@ -267,7 +265,7 @@ if __name__ == '__main__':
     print(dat_file)
     
     save_path = "./"
-    fname = "test2"
+    fname = "test"
     if_save = False
     
 

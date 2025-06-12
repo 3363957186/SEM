@@ -36,12 +36,12 @@ def create_model_subplots(model_data, model_name, colors, y_min, y_max, filename
     category_labels = {
         'male': 'Male',
         'female': 'Female',
-        'age_above_median': '> Median',
-        'age_below_median': '≤ Median',
+        'age_above_median': '≥ Median',
+        'age_below_median': '< Median',
         'whi': 'White',
         'oth': 'Other',
-        'educ_above_median': '> Median',
-        'educ_below_median': '≤ Median'
+        'educ_above_median': '≥ Median',
+        'educ_below_median': '< Median'
     }
     
     for i, subgroup in enumerate(subgroups):
@@ -124,8 +124,5 @@ def plot(config):
 
     create_model_subplots(amy_data, 'Amyloid', amyloid_colors, 0.3, 1, config['output']['efig1a'])
     create_model_subplots(tau_data, 'Tau', tau_colors, 0.3, 1, config['output']['efig1b'])
-
-
-
 
 

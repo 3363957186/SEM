@@ -91,8 +91,11 @@ class FrequencyImputer(Imputer):
                     new[k] = 0
                 else:
                     if info['type'] == 'numerical':
-                        rnd_idx = np.random.randint(0, len(self.pool[k]))
-                        new[k] = np.array(self.pool[k][rnd_idx])
+                        try:
+                            rnd_idx = np.random.randint(0, len(self.pool[k]))
+                            new[k] = np.array(self.pool[k][rnd_idx])
+                        except:
+                            new[k] = np.array([0], dtype=np.float32)
                         # print(type(new[k]))
                     elif info['type'] == 'imaging':
                         new[k] = np.zeros(tuple(info['shape']), dtype=np.float32)

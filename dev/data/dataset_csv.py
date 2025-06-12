@@ -67,6 +67,7 @@ class CSVDataset:
         shapes = []
 
         # mri
+        error_features = []
         img_fea_to_pop = []
         total = 0
         total_cohorts = {}
@@ -185,20 +186,27 @@ class CSVDataset:
         print('Out of {} samples, {} are dropped due to complete label missing.'.format(len(df), len(df) - len(df_lbl)))
         df = df[df.index.isin(df_lbl.index)]
         df.reset_index(drop=True, inplace=True)
-        
+    
+        print(set(shapes))
+        print("Error features ")
+        print(error_features)
 
         # some of the values need to be mapped to the desirable domain
-        # for name in features + labels:
-        #     if name in value_mapping:
-        #         col = df[name].to_list()
-        #         try:
-        #             col = [value_mapping[name][s] if not pd.isnull(s) else None for s in col]
-        #         except KeyError as err:
-        #             print(err, name)
-        #             exit()
-        #         df[name] = col
+        for name in features + labels:
+            if name in value_mapping:
+                col = df[name].to_list()
+                try:
+                    col = [value_mapping[name][s] if not pd.isnull(s) else None for s in col]
+                except KeyError as err:
+                    print(err, name)
+                    exit()
+                df[name] = col
                 
         # print(features)
+        
+        df = df.dropna(axis=1, how='all')
+        features = [fea for fea in features if fea in df.columns]
+        labels = [lab for lab in labels if lab in df.columns]
         
 
         # change np.nan to None
@@ -226,7 +234,8 @@ class CSVDataset:
         # getting label fractions
         self.label_fractions = {}
         for label in labels:
-            self.label_fractions[label] = dict(self.df[label].value_counts() / len(self.df[~self.df[label].isna()]))
+            # self.label_fractions[label] = dict(self.df[label].value_counts() / len(self.df[~self.df[label].isna()]))
+            self.label_fractions[label] = dict(self.df[label].value_counts() / len(self.df))
 
     def __len__(self):
         ''' ... '''
@@ -248,5 +257,3 @@ class CSVDataset:
         return self.cnf['label']
 
 
-
-# %%

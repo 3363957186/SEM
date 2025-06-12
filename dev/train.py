@@ -94,6 +94,7 @@ def parser():
     parser.add_argument('--wandb_project', type=str, help="The name of the wandb project")
     parser.add_argument('--device', default='cuda', type=str,
         help='Please specify cuda or cpu.')
+    parser.add_argument('--stage_1_ckpt', type=str, help="Path to stage 1 checkpoint for stage 2 training")
     args = parser.parse_args()
     return args
 
@@ -237,7 +238,8 @@ mdl = ADRDModel(
     fine_tune=args.fine_tune,
     early_stop_threshold=args.early_stop_threshold,
     transfer_epoch=args.transfer_epoch,
-    wandb_project=args.wandb_project
+    wandb_project=args.wandb_project,
+    stage_1_ckpt=args.stage_1_ckpt
 )
 
 # print(dat_trn.labels)
