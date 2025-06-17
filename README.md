@@ -7,7 +7,8 @@ This repository implements a transformer-based model for predicting amyloid-β (
 
 **Figure 1: Data, model development and validation strategy.** (a) Our model for assessing amyloid and tau status was developed using diverse data modalities, including individual-level demographics, health history, genetic information, neuropsychological testing, physical/neurological exams, and multi-sequence MRI scans. These data sources were aggregated from seven independent cohorts: NACC, A4, OASIS3, AIBL, FHS, ADNI and HABS. All features were harmonized to the UDS3 format and embeddings were extracted from multi-modal MRI scans. Inner concentric circles provide the sample size of the cases with Aβ PET data and outer circles denote the sample size with 𝜏 PET data. (b) Each feature was transformed into a set length vector through a modality-specific embedding approach before being input into the main transformer. A linear layer then linked the transformer to the output prediction layer. (c) The external ADNI and HABS datasets, as well as a held-out set of NACC* data, were selected to compare pathology-specific model predicted probabilities with biological outcomes and neuropathology grades. Shapley analysis was run on the regional 𝜏 model, and a graphical network analysis was performed to detect clusters of important brain regions using the Shapley values of the T1-weighted derived volumes. A similar community detection algorithm was run on the raw regional tau PET SUVrs and we compared communities derived from Shapley values with those derived from the regional SUVrs with statistical testing. The model architecture schematic in (b) was reproduced from our previous work.
 
-<!-- # Project structure -->
+# Hugging Face tool
+To facilitate future translational research, we have developed a prototype implementation of our framework through [Hugging Face](https://huggingface.co/spaces/vkola-lab/ncomms2025).
 
 # Prerequisites
 
@@ -37,35 +38,6 @@ pip install .
 ```
 
 Please note that the installation should take under 10 minutes.
-
-<!-- # Training
-- Create a configuration file similar to ```dev/data/toml_files/stage_1.toml```, categorizing each feature as ```numerical```, ```categorical``` or ```imaging```. Please add the image embedding paths to your data file as another column and set the type of this feature as ```imaging``` in the configuration file. 
-- An example script to generate image embeddings is provided in ```image_embeddings/swin_embeds.py```. Please download the [checkpoint](https://github.com/Project-MONAI/MONAI-extra-test-data/releases/download/0.8.1/model_swinvit.pt) prior to using this script.
-- Navigate to the repository's root directory 
-- Add the correct training and validation data paths to ```dev/train.sh```. Demo data is provided for reference at ```pseudodata/```.
-- If training using MRI embeddings, set these flags in ```dev/train.sh``` (please add the image embedding paths to the data file before setting these flags) :
-    ```bash
-    img_net="SwinUNETREMB" 
-    img_mode=1 # loads MRI embeddings
-    ```
-- If training without MRI embeddings, set these flags in ```dev/train.sh``` :
-    ```bash
-    img_net="NonImg" 
-    img_mode=-1
-    ```
-- Run ```bash dev/train.sh``` 
-
-# Evaluation
-## Generating model predictions
-
-- The model predictions were generated using the script ```dev/generate_predictions.py```
-- The deidentified source data for generating the plots are provided here ```figures/source_data/```
-- To generate the figures:
-    ```
-    cd figures/plot_results
-    python main.py
-    ``` -->
-
 
 # Training
 
