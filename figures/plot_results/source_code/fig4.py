@@ -195,10 +195,10 @@ def rainclouds_cl_levels(df, figname):
 
 
 def kde_plot(df, figname):
+    pio.kaleido.scope.mathjax = None
     fontsizes = 16
 
     cohort_markers = {'ADNI': 'circle', 'HABS': 'cross', 'NACC': 'diamond'}
-
     color_map = {'Aβ+, τ+': '#CC503E', 'Aβ-, τ-': '#008080'}
 
     fig = px.density_contour(
@@ -246,6 +246,8 @@ def kde_plot(df, figname):
             showlegend=True
         ))
 
+    add_manual_significance_lines(fig) 
+
     fig.update_layout(
         plot_bgcolor='white',
         paper_bgcolor='white',
@@ -285,8 +287,6 @@ def kde_plot(df, figname):
         font=dict(family="Arial, sans-serif", size=fontsizes, color="black")
     )
 
-    fig.show()
-
     # Export to PDF
     fig_width_inch = 3
     fig_height_inch = 1.5
@@ -296,6 +296,55 @@ def kde_plot(df, figname):
     pio.write_image(fig, figname, width=fig_width_px, height=fig_height_px)
 
 
+def add_manual_significance_lines(fig):
+    """Manually add significance lines with 4 stars (****) as requested"""
+    
+    # x axis
+    fig.add_shape(
+        type="line",
+        xref="paper", yref="paper",
+        x0=0.80, y0=0.80,  
+        x1=0.94, y1=0.80,  
+        line=dict(color="black", width=1.2)
+    )
+    
+    # caps for x line
+    fig.add_shape(type="line", xref="paper", yref="paper",
+                x0=0.80, y0=0.79, x1=0.80, y1=0.80,  # left
+                line=dict(color="black", width=1.2))
+    fig.add_shape(type="line", xref="paper", yref="paper",
+                x0=0.94, y0=0.79, x1=0.94, y1=0.80,  # right cap
+                line=dict(color="black", width=1.2))
+    
+    # stars
+    fig.add_annotation(xref="paper", yref="paper", x=0.885, y=0.85,
+                    text="****", showarrow=False,
+                    font=dict(size=14, color="black"))
+    
+    # y axis
+    fig.add_shape(
+        type="line",
+        xref="paper", yref="paper",
+        x0=0.75, y0=0.80,  
+        x1=0.75, y1=0.94, 
+        line=dict(color="black", width=1.2)
+    )
+    
+    # end caps for y
+    fig.add_shape(type="line", xref="paper", yref="paper",
+                x0=0.74, y0=0.80, x1=0.75, y1=0.80, # bottom cap
+                line=dict(color="black", width=1.2))
+    fig.add_shape(type="line", xref="paper", yref="paper",
+                x0=0.74, y0=0.94, x1=0.75, y1=0.94,  # top cap
+                line=dict(color="black", width=1.2))
+
+    # stars
+    fig.add_annotation(xref="paper", yref="paper", x=0.77, y=0.905,
+                    text="****", showarrow=False, textangle=90,
+                    font=dict(size=14, color="black"))
+
+                       
+
 def plot(config):
     # Figure 4a
     tau_level_df = pd.read_csv(config['source_data']['fig4a'])
@@ -304,5 +353,5 @@ def plot(config):
     cl_level_df = pd.read_csv(config['source_data']['fig4b'])
     rainclouds_cl_levels(cl_level_df, figname=config['output']['fig4b'])
     # Figure 4c
-    df = pd.read_csv(figname=config['source_data']['fig4c'])           
+    df = pd.read_csv(config['source_data']['fig4c'])           
     kde_plot(df, figname=config['output']['fig4c'])
