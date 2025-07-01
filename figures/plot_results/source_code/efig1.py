@@ -22,10 +22,10 @@ def create_model_subplots(model_data, model_name, colors, y_min, y_max, filename
     # Gray color for hatching
     hatch_color = '#808080' 
 
-    fontsizes = 16
-    tick_fontsize = 14
+    fontsizes = 10
+    tick_fontsize = 8.5
     
-    fig, axs = plt.subplots(1, 4, figsize=(20, 6))
+    fig, axs = plt.subplots(1, 4, figsize=(9.2, 3.4))
     subgroups = ['sex', 'age', 'race', 'educ']
     subgroup_labels = {
         'sex': 'Sex',
@@ -83,7 +83,9 @@ def create_model_subplots(model_data, model_name, colors, y_min, y_max, filename
             ax.text(bar.get_x() + bar.get_width()/2., height + 0.01,
                    f"{height:.2f}", ha='center', va='bottom', fontsize=fontsizes)
         
-        ax.set_ylabel('Score', fontsize=fontsizes)
+        if i == 0:
+            ax.set_ylabel('Score', fontsize=fontsizes)
+        ax.set_title(f'{subgroup_labels[subgroup]}', fontsize=fontsizes)
         ax.set_title(f'{subgroup_labels[subgroup]}', fontsize=fontsizes)
         
         ax.set_ylim(y_min, y_max)
@@ -95,9 +97,9 @@ def create_model_subplots(model_data, model_name, colors, y_min, y_max, filename
         
         ax.grid(axis='y', linestyle='--', alpha=0.3)
         
-        ax.legend(loc='upper right', fontsize=fontsizes)
+        ax.legend(loc='upper right', fontsize=tick_fontsize)
     
-    fig.suptitle(f'{model_name}', fontsize=20, y=0.98)
+    fig.suptitle(f'{model_name}', fontsize=10, y=0.98)
     
     plt.tight_layout()
     plt.subplots_adjust(wspace=0.15, top=0.9)
