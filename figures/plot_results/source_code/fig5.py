@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import colormaps
 from PyComplexHeatmap import *
@@ -134,7 +135,7 @@ def plot_graph_communities(community_data, df_row, df_col, cmap, figname):
     plt.rcParams["font.family"] = "Arial"
     cm = DotClustermapPlotter(community_data, x='community_full', y='index', value='value', hue='community_full',
                               colors=comm_full_colors, marker=comm_full_markers,
-                              vmax=1, vmin=0, s='value', max_s=50, grid='minor', verbose=0,
+                              vmax=1, vmin=0, s='value', max_s=30, grid='minor', verbose=0,
                               top_annotation=col_ha, right_annotation=row_ha,
                               col_split=df_col.label, col_split_order=label_names, col_cluster=False, col_split_gap=2,
                               row_split=df_row.stage, row_split_order=stage_order, row_cluster=False, row_split_gap=2,
