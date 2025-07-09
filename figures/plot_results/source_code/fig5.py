@@ -125,7 +125,7 @@ def plot_graph_communities(community_data, df_row, df_col, cmap, figname):
                                                  add_text=True, text_kws={'color':'white','fontsize':8}, legend_kws={'color_text':False,'fontsize':10}),
                                graph=anno_simple(df_col.graph, colors=approach_colors, height=6, legend=True,
                                                  add_text=False, text_kws={'color':'white','fontsize':8}, legend_kws=
-                                                 {'labels':['SHAP-derived graph','SUVr-derived graph'],'color_text':False,'fontsize':10}),
+                                                 {'labels':['SHAP-derived','SUVr-derived'],'color_text':False,'fontsize':10}),
                                verbose=0, label_side='right', label_kws={'fontsize':'10','color':'black'},
                                hgap=0.5, plot_legend=True)
 
