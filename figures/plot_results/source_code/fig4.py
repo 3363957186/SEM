@@ -6,7 +6,7 @@ import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
-import ptitprince1 as pt
+import source_code.ptitprince1 as pt
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go

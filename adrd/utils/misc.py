@@ -14,14 +14,14 @@ import inspect
 _depth = lambda L: isinstance(L, (Sequence, np.ndarray)) and max(map(_depth, L)) + 1
 
 
-def get_metrics(y_true, y_pred, scores, mask):
+def get_metrics(y_true, y_pred, scores_proba, mask):
     ''' ... '''
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         
         masked_y_true = y_true[np.where(mask == 1)]
         masked_y_pred = y_pred[np.where(mask == 1)]
-        masked_scores = scores[np.where(mask == 1)]
+        masked_scores_proba = scores_proba[np.where(mask == 1)]
 
         # metrics that are based on predictions
         try:
@@ -44,11 +44,11 @@ def get_metrics(y_true, y_pred, scores, mask):
 
             # metrics that are based on scores,
             try:
-                auc_roc = roc_auc_score(masked_y_true, masked_scores)
+                auc_roc = roc_auc_score(masked_y_true, masked_scores_proba)
             except:
                 auc_roc = 0
             try:
-                auc_pr = average_precision_score(masked_y_true, masked_scores)
+                auc_pr = average_precision_score(masked_y_true, masked_scores_proba)
             except:
                 auc_pr = 0
                 

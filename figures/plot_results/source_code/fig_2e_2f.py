@@ -14,6 +14,13 @@ from matplotlib.pyplot import figure
 from sklearn.metrics import multilabel_confusion_matrix, classification_report, roc_curve, auc, confusion_matrix, \
      RocCurveDisplay, precision_score, recall_score, average_precision_score, PrecisionRecallDisplay, precision_recall_curve, roc_auc_score
      
+plt.rcParams['font.family'] = 'Arial'
+     
+    
+def dedup(arr_a, arr_b):
+    arr_a_unique, idx = np.unique(arr_a, return_index=True)
+    return arr_a_unique, arr_b[idx]
+     
 # AUC ROC
 
 def roc_auc_scores(y_true, y_pred, features):
@@ -32,7 +39,9 @@ def roc_auc_scores(y_true, y_pred, features):
     fpr["micro"], tpr["micro"], _ = roc_curve(
         y_true.ravel(), y_pred.ravel()
     )
-    auc_scores["micro"] = auc(fpr["micro"], tpr["micro"])
+    # auc_scores["micro"] = auc(fpr["micro"], tpr["micro"])
+    auc_scores["micro"] = roc_auc_score(y_true, y_pred, average='micro')
+    assert round(roc_auc_score(y_true, y_pred, average='micro'), 2) == round(auc(fpr["micro"] , tpr["micro"]), 2)
 
     # Compute macro-average ROC curve and ROC area
     all_fpr = np.unique(np.concatenate([fpr[fea] for fea in features]))
@@ -42,7 +51,9 @@ def roc_auc_scores(y_true, y_pred, features):
     mean_tpr /= len(features)
     fpr["macro"] = all_fpr
     tpr["macro"] = mean_tpr
-    auc_scores["macro"] = auc(fpr["macro"], tpr["macro"])
+    # auc_scores["macro"] = auc(fpr["macro"], tpr["macro"])
+    auc_scores["macro"] = roc_auc_score(y_true, y_pred, average='macro')
+    assert round(roc_auc_score(y_true, y_pred, average='macro'), 2) == round(auc(fpr["macro"] , tpr["macro"]), 2)
 
     # Compute weighted-average ROC curve and ROC area
     support = np.sum(y_true, axis=0)
@@ -53,18 +64,23 @@ def roc_auc_scores(y_true, y_pred, features):
         weighted_tpr += weights[i] * np.interp(all_fpr, fpr[fea], tpr[fea])
     fpr["weighted"] = all_fpr
     tpr["weighted"] = weighted_tpr
-    auc_scores["weighted"] = auc(fpr["weighted"] , tpr["weighted"])  
+    # auc_scores["weighted"] = auc(fpr["weighted"] , tpr["weighted"])
+    auc_scores["weighted"] = roc_auc_score(y_true, y_pred, average='weighted')
+    assert round(roc_auc_score(y_true, y_pred, average='weighted'), 2) == round(auc(fpr["weighted"] , tpr["weighted"]), 2)
 
     return fpr, tpr, auc_scores, thresholds
 
 def generate_roc(y_true, y_pred, features, figsize=(2.3, 2.3), figname='Average_ROC_curves'):
     fpr, tpr, auc_scores, _ = roc_auc_scores(y_true=y_true, y_pred=y_pred, features=features)
     # n_classes = y_true.shape[1]
+
+    for avg_type in ['micro', 'macro', 'weighted']:
+        fpr[avg_type], tpr[avg_type] = dedup(fpr[avg_type], tpr[avg_type])
     
     lw = 0.5
 
     # Average ROC curves
-    colors_ = [(30/255, 136/255, 229/255, 1.0), (255/255, 193/255, 7/255, 1.0), (216/255, 27/255, 96/255, 1.0)]
+    # colors_ = [(30/255, 136/255, 229/255, 1.0), (255/255, 193/255, 7/255, 1.0), (216/255, 27/255, 96/255, 1.0)]
     
     sensitivity_comb = np.array(list(tpr['micro']) + list(tpr['macro']) + list(tpr['weighted']))
     specificity_comb = np.array(list(1 - fpr['micro']) + list(1 - fpr['macro']) + list(1 - fpr['weighted']))
@@ -73,9 +89,10 @@ def generate_roc(y_true, y_pred, features, figsize=(2.3, 2.3), figname='Average_
                          + ['weighted (AUC = {0:0.2f})'.format(auc_scores["weighted"])] * len(tpr['weighted']))
     df_roc = pd.DataFrame({'Specificity': specificity_comb, 'Sensitivity': sensitivity_comb, 'AUC ROC': plt_style})
     # print(df_roc)
+    df_roc.to_csv("check.csv", index=False)
     
     fig = plt.figure(figsize=figsize, dpi=300)
-    sns.lineplot(data=df_roc, x='Specificity', y='Sensitivity', style='AUC ROC', hue='AUC ROC', palette=colors_, linewidth=lw)
+    sns.lineplot(data=df_roc, x='Specificity', y='Sensitivity', style='AUC ROC', hue='AUC ROC', palette='colorblind', linewidth=lw)
     
     # plt.setp(plt.spines.values(), color='w')
     plt.axhline(0.9, linestyle='-', color='#CCCCCC', lw=1, zorder=0)
@@ -88,10 +105,14 @@ def generate_roc(y_true, y_pred, features, figsize=(2.3, 2.3), figname='Average_
     # plt.plot([0, 1], [0, 1], 'k--', lw=lw)
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.0])
-    plt.xlabel('Specificity')
-    plt.ylabel('Sensitivity')
+    plt.xticks(fontsize=7)
+    plt.yticks(fontsize=7)
+    plt.xlabel('Specificity', fontsize=7)
+    plt.ylabel('Sensitivity', fontsize=7)
     plt.title('')
-    plt.legend(loc='lower left', fontsize=6) #, prop=legend_properties)
+    legend = plt.legend(loc='lower left', fontsize=7) #, prop=legend_properties)
+    for line in legend.get_lines():
+        line.set_linewidth(lw)
     plt.tight_layout()
     # plt.show()
     plt.savefig(figname, format='pdf', dpi=300, bbox_inches='tight')
@@ -115,6 +136,7 @@ def precision_recall(y_true, y_pred, features):
         y_pred.ravel())
     average_precision["micro"] = average_precision_score(y_true, y_pred,
                                                         average="micro")
+    assert round(average_precision_score(y_true, y_pred, average='micro'), 2) == round(auc(recall["micro"] , precision["micro"]), 2)
 
     # Compute the macro-average precision-recall curve and average precision
     mean_recall = np.unique(np.concatenate([recall[fea] for i, fea in enumerate(features)]))
@@ -128,6 +150,7 @@ def precision_recall(y_true, y_pred, features):
 
     average_precision["macro"] = average_precision_score(y_true, y_pred,
                                                         average="macro")
+    assert round(average_precision_score(y_true, y_pred, average='macro'), 2) == round(auc(recall["macro"] , precision["macro"]), 2)
 
     # Compute the weighted-average precision-recall curve and average precision
 
@@ -141,16 +164,21 @@ def precision_recall(y_true, y_pred, features):
     precision["weighted"] = weighted_precision
     average_precision["weighted"] = average_precision_score(y_true, y_pred,
                                                                 average="weighted")
+    assert round(average_precision_score(y_true, y_pred, average='weighted'), 2) == round(auc(recall["weighted"] , precision["weighted"]), 2)
 
     return precision, recall, average_precision
 
 
 def generate_pr(y_true, y_pred, features, figsize=(2.3, 2.3), figname='Average_PR_curves'):
     precision, recall, average_precision = precision_recall(y_true=y_true, y_pred=y_pred, features=features)
+
+    for avg_type in ['micro', 'macro', 'weighted']:
+        recall[avg_type], precision[avg_type] = dedup(recall[avg_type], precision[avg_type])
+        
     # n_classes = y_true.shape[1]
     lw = 0.5
     
-    colors_ = [(30/255, 136/255, 229/255, 1.0), (255/255, 193/255, 7/255, 1.0), (216/255, 27/255, 96/255, 1.0)]
+    # colors_ = [(30/255, 136/255, 229/255, 1.0), (255/255, 193/255, 7/255, 1.0), (216/255, 27/255, 96/255, 1.0)]
     
     precision_comb = np.array(list(precision['micro']) + list(precision['macro']) + list(precision['weighted']))
     recall_comb = np.array(list(recall['micro']) + list(recall['macro']) + list(recall['weighted']))
@@ -161,7 +189,7 @@ def generate_pr(y_true, y_pred, features, figsize=(2.3, 2.3), figname='Average_P
     # print(df)
     
     fig = plt.figure(figsize=figsize, dpi=300)
-    sns.lineplot(data=df_pr, x='Recall', y='Precision', style='AUC PR', hue='AUC PR', palette=colors_, linewidth=lw)
+    sns.lineplot(data=df_pr, x='Recall', y='Precision', style='AUC PR', hue='AUC PR', palette='colorblind', linewidth=lw)
     
     
     
@@ -175,10 +203,14 @@ def generate_pr(y_true, y_pred, features, figsize=(2.3, 2.3), figname='Average_P
 
     plt.ylim([0.0, 1.0])
     plt.xlim([0.0, 1.0])
-    plt.xlabel('Recall')
-    plt.ylabel('Precision')
+    plt.xlabel('Recall', fontsize=7)
+    plt.ylabel('Precision', fontsize=7)
+    plt.xticks(fontsize=7)
+    plt.yticks(fontsize=7)
     plt.title('')
-    plt.legend(loc='lower left', fontsize=6) #, prop=legend_properties)
+    legend = plt.legend(loc='lower left', fontsize=7) #, prop=legend_properties)
+    for line in legend.get_lines():
+        line.set_linewidth(lw)
     plt.tight_layout()
     plt.savefig(figname, format='pdf', dpi=300, bbox_inches='tight')
     # plt.show()
@@ -190,6 +222,12 @@ def plot(config):
     df = pd.read_csv(config['source_data']['fig2e_2f'])
     y_true_ =  np.array(df[[f'{lab}_label' for lab in labels]])
     scores_proba_ =  np.array(df[[f'{lab}_prob' for lab in labels]])
+    
+    print(y_true_.shape, scores_proba_.shape)
+    
+    print(roc_auc_score(y_true_, scores_proba_, average='micro'))
+    print(roc_auc_score(y_true_, scores_proba_, average='macro'))
+    print(roc_auc_score(y_true_, scores_proba_, average='weighted'))
 
     generate_roc(y_true_, scores_proba_, labels, figname=config['output']['fig2e'])
     generate_pr(y_true_, scores_proba_, labels, figname=config['output']['fig2f'])

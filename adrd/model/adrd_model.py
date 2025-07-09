@@ -1110,16 +1110,16 @@ class ADRDModel(BaseEstimator):
             verbose=(self.verbose > 2)
         )
     
-    def _init_loss_func(self, 
-        num_per_cls: dict[str, tuple[int, int]],
-    ) -> dict[str, Module]:
-        """ ... """
-        return {k: nn.SigmoidFocalLossBeta(
-            beta = self.beta,
-            gamma = self.gamma,
-            num_per_cls = num_per_cls[k],
-            reduction = 'none',
-        ) for k in self.tgt_modalities}
+    # def _init_loss_func(self, 
+    #     num_per_cls: dict[str, tuple[int, int]],
+    # ) -> dict[str, Module]:
+    #     """ ... """
+    #     return {k: nn.SigmoidFocalLossBeta(
+    #         beta = self.beta,
+    #         gamma = self.gamma,
+    #         num_per_cls = num_per_cls[k],
+    #         reduction = 'none',
+    #     ) for k in self.tgt_modalities}
     
     def _proc_fit(self):
         """ ... """
