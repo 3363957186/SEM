@@ -116,21 +116,22 @@ def plot_graph_communities(community_data, df_row, df_col, cmap, figname):
 
     row_ha = HeatmapAnnotation(label=anno_simple(df_row.stage, add_text=False, legend=False, text_kws={'color':'black'},
                                                  colors=stage_colors, height=6, legend_kws={'color_text':False}),
-                               label0=anno_label(df_row.stage, merge=True, colors='black', rotation=0, height=4, fontsize=10),
+                               label0=anno_label(df_row.stage, merge=True, colors='black', rotation=0, height=4, fontsize=7),
                                label_side='top', label_kws={'fontsize':'1', 'color':'white'}, verbose=0, axis=0,
                                hgap=0.5, plot_legend=True)
 
     col_ha = HeatmapAnnotation(label0=anno_label(df_col.star, merge=True, colors='black', rotation=90, height=1, arrowprops=dict(visible=False)),
                                label=anno_simple(df_col.label, colors=label_colors, height=6, legend=True,
-                                                 add_text=True, text_kws={'color':'white','fontsize':8}, legend_kws={'color_text':False,'fontsize':10}),
+                                                 add_text=True, text_kws={'color':'white','fontsize':7}, legend_kws={'color_text':False,'fontsize':7}),
                                graph=anno_simple(df_col.graph, colors=approach_colors, height=6, legend=True,
-                                                 add_text=False, text_kws={'color':'white','fontsize':8}, legend_kws=
-                                                 {'labels':['SHAP-derived','SUVr-derived'],'color_text':False,'fontsize':10}),
-                               verbose=0, label_side='right', label_kws={'fontsize':'10','color':'black'},
+                                                 add_text=False, text_kws={'color':'white','fontsize':7}, legend_kws=
+                                                 {'labels':['SHAP-derived','SUVr-derived'],'color_text':False,'fontsize':7}),
+                               verbose=0, label_side='right', label_kws={'fontsize':'7','color':'black'},
                                hgap=0.5, plot_legend=True)
 
-    plt.figure(figsize=(12,15))
+    plt.figure(figsize=(8.27, 11.69))
 
+    plt.rcParams["font.family"] = "Arial"
     cm = DotClustermapPlotter(community_data, x='community_full', y='index', value='value', hue='community_full',
                               colors=comm_full_colors, marker=comm_full_markers,
                               vmax=1, vmin=0, s='value', max_s=50, grid='minor', verbose=0,
