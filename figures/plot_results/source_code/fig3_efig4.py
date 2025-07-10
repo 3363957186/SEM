@@ -21,6 +21,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from statannotations.Annotator import Annotator
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
 plt.rcParams['font.family'] = 'Arial'
 
 
@@ -173,9 +174,8 @@ def bubble_plot(df, proba_col, outcome_col, proba_name, outcome_name, figname, a
 def rainclouds_preclin(data, x_col, y_col, figname, 
                       x_labels=None, y_label='P(Aβ)', 
                       palette='inferno_r', 
-                      font_sizes=7, figsize=(3, 2.3),
+                      font_sizes=7, figsize=(3.45, 2.3),
                       test='Mann-Whitney', pairs=None, dpi=300):
-
     if x_labels is None:
         x_labels = [f'Aβ PET-', f'Aβ PET+']
     if pairs is None:
@@ -300,7 +300,7 @@ def annotate(df, ax, pairs, order, xy=(0.95, 0.03)):
     # matrix_text.insert(0, 'p-values{: <5}'.format(' '))
     matrix_text = '\n'.join(matrix_text)
     print(matrix_text)
-    ax.annotate(matrix_text, xy=xy, xycoords='axes fraction', ha='right', va='bottom', bbox=dict(boxstyle='round,pad=0.3', edgecolor='black', facecolor=(1, 1, 1, 0.0)))
+    ax.annotate(matrix_text, xy=xy, xycoords='axes fraction', ha='right', va='bottom', bbox=dict(boxstyle='round,pad=0.3', edgecolor='black', facecolor=(1, 1, 1, 0.0)), fontsize=7)
 
 
 def rainclouds_stages(df, figname):
@@ -308,13 +308,13 @@ def rainclouds_stages(df, figname):
     ax1_pairs = [('A-T-', 'A+T-'), ('A+T-', 'A+MTL+'), ('A+MTL+', 'A+NEO+'), ('A-T-', 'A+NEO+'), ('A-T-', 'A+MTL+'), ('A+T-', 'A+NEO+')]
     df_filtered = df[df['AT_ProfileReg'].isin(profile_order)]
 
-    font_sizes = 11
-    fig, ax = plt.subplots(figsize=(6,4))
+    font_sizes = 7
+    fig, ax = plt.subplots(figsize=(3.45, 2.3))
 
     ax = pt.RainCloud(data = df_filtered, x = "AT_ProfileReg", y = "ATRegScore_PC1", orient='v', alpha=0.8,
-    palette = "inferno_r", bw=.2, ax=ax, linewidth=0.5, dodge=True, width_viol=.7, width_box=0.2, point_size = 2, jitter=1, cut =3)
+    palette = "inferno_r", bw=.2, ax=ax, linewidth=0.5, dodge=True, width_viol=.7, width_box=0.2, point_size = 1, jitter=1, cut =3)
 
-    annotate(df=df_filtered, ax=ax, pairs=ax1_pairs, order=profile_order, xy=(0.50, 0.80))
+    annotate(df=df_filtered, ax=ax, pairs=ax1_pairs, order=profile_order, xy=(0.60, 0.70))
 
     plt.xlabel('')
     plt.ylabel('AT score')
@@ -323,7 +323,7 @@ def rainclouds_stages(df, figname):
     ax.tick_params(axis='both', labelsize=font_sizes)
     current_xlim = ax.get_xlim()
     ax.set_xlim(current_xlim[0] - 0.2, current_xlim[1])  # Add more space to the left
-
+    ax.set_ylim(-5, 15)
     sns.despine()
     plt.savefig(figname, dpi=300, bbox_inches='tight')
 
