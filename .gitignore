@@ -173,6 +173,8 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
+image_embeddings/model_swinvit.pt
+huggingface_setup
 
 figures/extended_fig_1_.ipynb
 test.csv
