@@ -10,6 +10,7 @@ import source_code.ptitprince1 as pt
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 from scipy.stats import linregress, mannwhitneyu
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'Arial'
@@ -76,7 +77,7 @@ def add_stat_significance(fig, x_start, x_end, y_start, y_end, text, orientation
 
 def rainclouds_tau_levels(df, figname):
     sns.set_theme(style="white", context="paper")
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(5, 2.3), sharey=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(4.8, 2.3), sharey=True)
     font_sizes = 7
 
     # centiloids
@@ -108,7 +109,7 @@ def rainclouds_tau_levels(df, figname):
         if isinstance(c, mpatches.Patch):
             c.set_linewidth(1)
 
-    # # prob amy
+    # prob amy
     cb_palette = sns.color_palette("YlGnBu")
     custom_pal = {'Low/med τ PET': cb_palette[0], 'High τ PET': cb_palette[2]}
 
@@ -139,7 +140,7 @@ def rainclouds_tau_levels(df, figname):
 
 
 def rainclouds_cl_levels(df, figname):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(5, 2.3), sharey=True)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(4.8, 2.3), sharey=True)
     font_sizes = 7
 
     # centiloids
@@ -196,49 +197,103 @@ def rainclouds_cl_levels(df, figname):
 
 def kde_plot(df, figname):
     pio.kaleido.scope.mathjax = None
-    fontsizes = 16
+    font_sizes = 9
 
     cohort_markers = {'ADNI': 'circle', 'HABS': 'cross', 'NACC': 'diamond'}
     color_map = {'Aβ+, τ+': '#CC503E', 'Aβ-, τ-': '#008080'}
 
-    fig = px.density_contour(
+    # making subplots to have more control on spacing between boxplots: 2x2 grid, top-right empty
+    fig = make_subplots(
+        rows=2, cols=2,
+        column_widths=[0.95, 0.15],
+        row_heights=[0.2, 0.8],
+        horizontal_spacing=0.02,
+        vertical_spacing=0.02,
+        specs=[[{"type": "box"}, None],
+               [{"type": "contour"}, {"type": "box"}]]
+    )
+
+    # main contour plot (bottom left)
+    contour_fig = px.density_contour(
         df,
         x='amy_label_prob',
         y='tau_label_prob',
         color='Profile',
-        marginal_x='box',
-        marginal_y='box',
+        marginal_x=None,
+        marginal_y=None,
         color_discrete_map=color_map,
         title=''
     )
+    for trace in contour_fig.data:
+        fig.add_trace(trace, row=2, col=1)
 
+
+    # top marginal box plot (x)
+    for profile, color in color_map.items():
+        fig.add_trace(
+            go.Box(
+                x=df.loc[df['Profile'] == profile, 'amy_label_prob'],
+                marker_color=color,
+                name=profile,
+                boxpoints='outliers',
+                marker_size=2,
+                line_width=0.7,
+                showlegend=False,
+                width=0.4
+            ),
+            row=1, col=1
+        )
+
+    # right marginal box plot (y)
+    for profile, color in color_map.items():
+        fig.add_trace(
+        go.Box(
+            y=df.loc[df['Profile'] == profile, 'tau_label_prob'],
+            marker_color=color,
+            name=profile,
+            boxpoints='outliers',
+            marker_size=2,
+            line_width=0.7,
+            showlegend=False,
+            width=0.2
+        ),
+        row=2, col=2
+    )
+
+    # custom traces (contour and box)
     for trace in fig.data:
-        if trace.type == 'contour':
-            trace.line.width = 1
-            trace.showlegend = True  
-
-    for i, trace in enumerate(fig.data):
-        if trace.type in ['box', 'violin']:
+        if trace.type == 'histogram2dcontour':
+            trace.line.width = 0.7
+            trace.showlegend = True
+        elif trace.type == 'box':
             trace.showlegend = False
+            trace.line.width = 0.7
+            trace.boxpoints = 'outliers'
+            trace.pointpos = 0
+            trace.jitter = 0.3
+            trace.marker.size = 2
+            trace.notched = False
 
+    # add scatter
     fig.add_trace(go.Scatter(
         x=df['amy_label_prob'],
         y=df['tau_label_prob'],
         mode='markers',
         marker=dict(
-            size=5,
+            size=2.5,
             color=df['Profile'].map(color_map),
             symbol=df['COHORT'].map(cohort_markers)
         ),
         showlegend=False
-    ))
+    ), row=2, col=1)
 
+    # legend for cohort markers
     for cohort, marker in cohort_markers.items():
         fig.add_trace(go.Scatter(
             x=[None], y=[None],
             mode='markers',
             marker=dict(
-                size=8,
+                size=2.5,
                 color='black',
                 symbol=marker
             ),
@@ -246,104 +301,84 @@ def kde_plot(df, figname):
             showlegend=True
         ))
 
-    add_manual_significance_lines(fig) 
+    add_manual_significance_lines(fig)
 
+    # Layout and axes
     fig.update_layout(
         plot_bgcolor='white',
         paper_bgcolor='white',
-        xaxis=dict(
-            title='P(Aβ)',
-            title_font=dict(size=fontsizes),
-            linecolor='black',
-            showgrid=True,
-            gridcolor='lightgrey',
-            gridwidth=0.5,
-            ticks='outside',
-            tickcolor='black',
-            ticklen=10,
-            nticks=10
-        ),
-        yaxis=dict(
-            title='P(τ)',
-            title_font=dict(size=fontsizes),
-            linecolor='black',
-            showgrid=True,
-            gridcolor='lightgrey',
-            gridwidth=0.5,
-            ticks='outside',
-            tickcolor='black',
-            ticklen=10,
-            nticks=10
-        ),
+        margin=dict(l=20, r=20, t=10, b=10, pad=0),
         legend=dict(
             title_text="",
             yanchor="top",
-            y=1.2,
+            y=1.25,
             xanchor="center",
             x=0.5,
             orientation="h",
-            itemsizing="constant"
+            itemsizing="trace",
+            font=dict(size=font_sizes, family='Arial', color='black')
         ),
-        font=dict(family="Arial, sans-serif", size=fontsizes, color="black")
+        font=dict(size=font_sizes, family='Arial', color='black')
     )
 
-    # Export to PDF
-    fig_width_inch = 3
-    fig_height_inch = 1.5
-    dpi = 300
-    fig_width_px = fig_width_inch * dpi
-    fig_height_px = fig_height_inch * dpi
-    pio.write_image(fig, figname, width=fig_width_px, height=fig_height_px)
+    fig.update_xaxes(title_text='P(Aβ)', row=2, col=1, showline=True, linecolor='black', linewidth=0.7, nticks=10, ticklen=2, title_font=dict(family="Arial", size=font_sizes))
+    fig.update_yaxes(title_text='P(τ)', row=2, col=1, showline=True, linecolor='black', linewidth=0.7, nticks=10, ticklen=2, title_font=dict(family="Arial", size=font_sizes))
+    fig.update_xaxes(showticklabels=False, title_text='', row=2, col=2)
+    fig.update_xaxes(showticklabels=False, title_text='', row=1, col=1)
+    fig.update_yaxes(showticklabels=False, title_text='', row=1, col=1)
+    fig.update_yaxes(showticklabels=False, title_text='', row=2, col=2)
+
+    pio.write_image(fig, figname, width=442, height=221)
 
 
 def add_manual_significance_lines(fig):
-    """Manually add significance lines with 4 stars (****) as requested"""
+    """Manually add significance lines with 4 stars (****)"""
     
     # x axis
     fig.add_shape(
         type="line",
         xref="paper", yref="paper",
-        x0=0.80, y0=0.80,  
-        x1=0.94, y1=0.80,  
-        line=dict(color="black", width=1.2)
+        x0=0.88, y0=0.82,  
+        x1=0.975, y1=0.82,  
+        line=dict(color="black", width=0.7)
     )
     
     # caps for x line
     fig.add_shape(type="line", xref="paper", yref="paper",
-                x0=0.80, y0=0.79, x1=0.80, y1=0.80,  # left
-                line=dict(color="black", width=1.2))
+                x0=0.881, y0=0.82, x1=0.881, y1=0.80,  # left
+                line=dict(color="black", width=0.7))
     fig.add_shape(type="line", xref="paper", yref="paper",
-                x0=0.94, y0=0.79, x1=0.94, y1=0.80,  # right cap
-                line=dict(color="black", width=1.2))
+                x0=0.974, y0=0.82, x1=0.974, y1=0.80,  # right cap
+                line=dict(color="black", width=0.7))
     
     # stars
-    fig.add_annotation(xref="paper", yref="paper", x=0.885, y=0.85,
+    fig.add_annotation(xref="paper", yref="paper", x=0.95, y=0.89,
                     text="****", showarrow=False,
-                    font=dict(size=14, color="black"))
+                    font=dict(size=9, color="black"))
     
     # y axis
     fig.add_shape(
         type="line",
         xref="paper", yref="paper",
-        x0=0.75, y0=0.80,  
-        x1=0.75, y1=0.94, 
-        line=dict(color="black", width=1.2)
+        x0=0.83, y0=0.96,  
+        x1=0.83, y1=0.83, 
+        line=dict(color="black", width=0.7)
     )
     
     # end caps for y
     fig.add_shape(type="line", xref="paper", yref="paper",
-                x0=0.74, y0=0.80, x1=0.75, y1=0.80, # bottom cap
-                line=dict(color="black", width=1.2))
+                x0=0.831, y0=0.83, x1=0.823, y1=0.83, # bottom cap
+                line=dict(color="black", width=0.7))
+
     fig.add_shape(type="line", xref="paper", yref="paper",
-                x0=0.74, y0=0.94, x1=0.75, y1=0.94,  # top cap
-                line=dict(color="black", width=1.2))
+                x0=0.831, y0=0.96, x1=0.823, y1=0.96,  # top cap
+                line=dict(color="black", width=0.7))
 
     # stars
-    fig.add_annotation(xref="paper", yref="paper", x=0.77, y=0.905,
+    fig.add_annotation(xref="paper", yref="paper", x=0.855, y=0.96,
                     text="****", showarrow=False, textangle=90,
-                    font=dict(size=14, color="black"))
-
-                       
+                    font=dict(size=9, color="black"))
+               
 
 def plot(config):
     # Figure 4a
