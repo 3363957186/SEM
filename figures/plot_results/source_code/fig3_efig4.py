@@ -175,7 +175,7 @@ def rainclouds_preclin(data, x_col, y_col, figname,
                       x_labels=None, y_label='P(Aβ)', 
                       palette='inferno_r', 
                       font_sizes=7, figsize=(3.45, 2.3),
-                      test='Mann-Whitney', pairs=None, dpi=300):
+                      test='Mann-Whitney-ls', pairs=None, dpi=300):
     if x_labels is None:
         x_labels = [f'Aβ PET-', f'Aβ PET+']
     if pairs is None:
@@ -330,7 +330,7 @@ def rainclouds_stages(df, figname):
 
 def plot(config):
     # Fig 3a: P(AB) over centiloids bubble plot colored by ADAS
-    print("Plotting figure 3a")
+    # print("Plotting figure 3a")
     adas_data = pd.read_csv(config['source_data']['fig3a'])
     bubble_plot(adas_data, "amy_label_prob", "amy_CENTILOIDS", "P(Aβ)", "Centiloids", figname=config['output']['fig3a'], apply_log=False)
 
