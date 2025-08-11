@@ -1,6 +1,6 @@
 # AI-driven fusion of multimodal data for Alzheimer's disease biomarker assessment
 
-This work is accepted in *Nature Communications*.
+This work is published in _Nature Communications_ (https://doi.org/10.1038/s41467-025-62590-4).
 
 # Introduction
 This repository implements a transformer-based model for predicting amyloid-β (Aβ) and tau (𝜏) PET positivity in Alzheimer’s disease using multimodal clinical data. Leveraging data from $12,185$ participants across seven diverse cohorts, our model integrates demographics, medical history, functional assessments, neuropsychological test scores, neuroimaging, and fluid biomarkers. The model classifies individuals as amyloid PET positive or negative globally, and tau PET positive or negative within a widely used meta-temporal region. Additionally, it identifies abnormal 𝜏 accumulation in six key brain regions: medial temporal, lateral temporal, medial parietal, lateral parietal, frontal, and occipital. On a held-out test set, model-predicted probabilities aligned with true PET positivity, and an aggregate "AT score" derived from these probabilities tracked established disease stages.
