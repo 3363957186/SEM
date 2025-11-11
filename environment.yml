@@ -30,3 +30,6 @@ dependencies:
     - python-louvain==0.16
     - matplotlib-inline==0.1.7
     - pycomplexheatmap==1.7.7
+
+  - torch
+  - icecream

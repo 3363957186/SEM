@@ -1,0 +1,213 @@
+[label]
+    [label.label]
+    type = "categorical"
+    num_categories = 2
+
+[data]
+train_csv = "data/train.csv"
+val_csv = "data/val.csv"
+id_column = "donor_id"
+
+[feature.n_cells]
+type = "numerical"
+shape = [ 1,]
+
+[feature.count_cell_type__astrocyte]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__endothelial cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__GABAergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__oligodendrocyte precursor cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature.count_cell_type__oligodendrocyte]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__T cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__natural killer cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__B cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__plasma cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__microglial cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__perivascular macrophage"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L2/3 intratelencephalic projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L2/3-6 intratelencephalic projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L5/6 near-projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L5 extratelencephalic projecting glutamatergic cortical neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L6 corticothalamic-projecting glutamatergic cortical neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L6 intratelencephalic projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__L6b glutamatergic neuron of the primary motor cortex"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__lamp5 GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__pvalb GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__sst GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__VIP GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature.count_cell_type__pericyte]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__smooth muscle cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."count_cell_type__vascular leptomeningeal cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature.frac_cell_type__astrocyte]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__endothelial cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__GABAergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__oligodendrocyte precursor cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature.frac_cell_type__oligodendrocyte]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__T cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__natural killer cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__B cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__plasma cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__microglial cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__perivascular macrophage"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L2/3 intratelencephalic projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L2/3-6 intratelencephalic projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L5/6 near-projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L5 extratelencephalic projecting glutamatergic cortical neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L6 corticothalamic-projecting glutamatergic cortical neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L6 intratelencephalic projecting glutamatergic neuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__L6b glutamatergic neuron of the primary motor cortex"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__lamp5 GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__pvalb GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__sst GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__VIP GABAergic cortical interneuron"]
+type = "numerical"
+shape = [ 1,]
+
+[feature.frac_cell_type__pericyte]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__smooth muscle cell"]
+type = "numerical"
+shape = [ 1,]
+
+[feature."frac_cell_type__vascular leptomeningeal cell"]
+type = "numerical"
+shape = [ 1,]

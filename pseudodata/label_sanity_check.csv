@@ -1,0 +1,41 @@
+donor_id,disease,label
+Donor_348,dementia || Alzheimer disease,1
+Donor_1292,dementia || Alzheimer disease || frontotemporal dementia,1
+Donor_451,dementia || Alzheimer disease || Lewy body dementia,1
+Donor_73,dementia || Alzheimer disease,1
+Donor_1054,dementia || Alzheimer disease,1
+Donor_1231,dementia || Alzheimer disease || Lewy body dementia,1
+Donor_120,dementia || Alzheimer disease || Parkinson disease,1
+Donor_397,dementia || vascular dementia || Alzheimer disease,1
+Donor_1072,dementia || Alzheimer disease,1
+Donor_1434,dementia || Alzheimer disease,1
+Donor_943,dementia || Alzheimer disease,1
+Donor_919,dementia || vascular dementia || Alzheimer disease,1
+Donor_741,dementia || Alzheimer disease,1
+Donor_1080,dementia || Alzheimer disease,1
+Donor_194,dementia || Alzheimer disease,1
+Donor_568,dementia || Alzheimer disease,1
+Donor_123,dementia || Alzheimer disease || schizophrenia,1
+Donor_643,dementia || Alzheimer disease,1
+Donor_896,dementia || vascular dementia || Alzheimer disease,1
+Donor_1147,dementia || vascular dementia || Alzheimer disease,1
+Donor_269,schizophrenia,0
+Donor_1438,normal,0
+Donor_1424,schizophrenia,0
+Donor_1304,dementia || schizophrenia,0
+Donor_597,normal,0
+Donor_1365,normal,0
+Donor_107,normal,0
+Donor_1059,normal,0
+Donor_200,normal,0
+Donor_474,vascular dementia,0
+Donor_156,normal,0
+Donor_968,normal,0
+Donor_391,dementia || schizophrenia,0
+Donor_464,dementia,0
+Donor_1090,normal,0
+Donor_1026,normal,0
+Donor_491,normal,0
+Donor_521,normal,0
+Donor_1086,dementia,0
+Donor_839,normal,0

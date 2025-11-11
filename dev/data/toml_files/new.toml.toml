@@ -1,0 +1,12 @@
+[target]
+name = "label"              # 监督目标
+
+[features]
+numerical = ["age"]         # 你也可以先留空 []
+categorical = ["sex"]       # 没有就 []
+imaging = ["img_path"]      # 关键：这里放 MRI 路径列名
+
+[training]
+batch_size = 4
+num_epochs = 5
+lr = 1e-4

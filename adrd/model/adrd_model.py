@@ -1069,23 +1069,37 @@ class ADRDModel(BaseEstimator):
         )
 
         ldr_trn = DataLoader(
-            dataset = dat_trn,
-            batch_size = self.batch_size,
-            shuffle = True,
-            drop_last = False,
-            num_workers = self._dataloader_num_workers,
-            collate_fn = TransformerTrainingDataset.collate_fn,
+            #dataset = dat_trn,
+            #batch_size = self.batch_size,
+            #shuffle = True,
+            #drop_last = False,
+            #num_workers = self._dataloader_num_workers,
+            #collate_fn = TransformerTrainingDataset.collate_fn,
             # pin_memory = True
+            dataset= dat_trn,
+            batch_size=self.batch_size,
+            shuffle=True,
+            drop_last=False,
+            num_workers=0,  # ★ 关键：单进程
+            persistent_workers=False,  # ★ 关键：关闭持久 worker
+            pin_memory=False  # ★ CPU 上设 False 更稳
         )
 
         ldr_vld = DataLoader(
-            dataset = dat_vld,
-            batch_size = self.batch_size,
-            shuffle = False,
-            drop_last = False,
-            num_workers = self._dataloader_num_workers,
-            collate_fn = TransformerValidationDataset.collate_fn,
+            #dataset = dat_vld,
+            #batch_size = self.batch_size,
+            #shuffle = False,
+            #drop_last = False,
+            #num_workers = self._dataloader_num_workers,
+            #collate_fn = TransformerValidationDataset.collate_fn,
             # pin_memory = True
+            dataset = dat_vld,
+            batch_size=self.batch_size,
+            shuffle=False,
+            drop_last=False,
+            num_workers=0,  # ★
+            persistent_workers=False,  # ★
+            pin_memory=False  # ★
         )
 
         return ldr_trn, ldr_vld

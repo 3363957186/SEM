@@ -2,8 +2,8 @@
 
 # run this script from adrd_tool/
 
-conda activate /projectnb/vkolagrp/skowshik/conda_envs/adrd
-/projectnb/vkolagrp/skowshik/conda_envs/adrd/bin/pip install .
+#conda activate /projectnb/vkolagrp/skowshik/conda_envs/adrd
+#/projectnb/vkolagrp/skowshik/conda_envs/adrd/bin/pip install .
 
 # install the package
 # cd adrd_tool
@@ -11,8 +11,8 @@ conda activate /projectnb/vkolagrp/skowshik/conda_envs/adrd
 
 # define the variables
 prefix="."
-train_path="${prefix}/pseudodata/synthetic_train.csv"
-vld_path="${prefix}/pseudodata/synthetic_val.csv"
+train_path="./data/train.csv"
+vld_path="./data/val.csv"
 
 
 # Note for setting the flags
@@ -31,11 +31,13 @@ vld_path="${prefix}/pseudodata/synthetic_val.csv"
 # img_mode=-1
 
 # Using image embeddings
-img_net="SwinUNETREMB"
-img_mode=1
+#img_net="SwinUNETREMB"
+#img_mode=1
+img_net="NonImg"
+img_mode=-1
 
 # Stage 1
-cnf_file="${prefix}/dev/data/toml_files/stage_1_train.toml"
+cnf_file="${prefix}/stage_1.toml"
 ckpt_path="./dev/ckpt/model_stage_1.pt"
 
 # run train.py 
