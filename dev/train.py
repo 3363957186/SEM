@@ -95,6 +95,8 @@ def parser():
     parser.add_argument('--device', default='cuda', type=str,
         help='Please specify cuda or cpu.')
     parser.add_argument('--stage_1_ckpt', type=str, help="Path to stage 1 checkpoint for stage 2 training")
+    parser.add_argument("--eval_threshold", type=float, default=0.5,
+                        help="Probability threshold for binarizing predictions during evaluation (default: 0.5)")
     args = parser.parse_args()
     return args
 
@@ -239,7 +241,8 @@ mdl = ADRDModel(
     early_stop_threshold=args.early_stop_threshold,
     transfer_epoch=args.transfer_epoch,
     wandb_project=args.wandb_project,
-    stage_1_ckpt=args.stage_1_ckpt
+    stage_1_ckpt=args.stage_1_ckpt,
+    eval_threshold=args.eval_threshold
 )
 
 # print(dat_trn.labels)

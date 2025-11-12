@@ -42,8 +42,8 @@ ckpt_path="./dev/ckpt/model_stage_1.pt"
 
 # run train.py 
 python dev/train.py --train_path $train_path --vld_path $vld_path --cnf_file $cnf_file --ckpt_path $ckpt_path --d_model 256 --nhead 1 \
-                    --num_epochs 128 --batch_size 128 --lr 1e-3 --gamma 2 --img_mode $img_mode --img_net $img_net --img_size "(182,218,182)" \
-                    --fusion_stage middle --imgnet_layers 2 --weight_decay 0.01 --n_splits 1 --stage 1 --save_intermediate_ckpts --early_stop_threshold 15 --transfer_epoch 15 --device "cuda" --fine_tune  #--wandb_project "Project" --wandb 
+                    --num_epochs 128 --batch_size 128 --lr 5e-4 --gamma 1 --img_mode $img_mode --img_net $img_net --img_size "(182,218,182)" \
+                    --eval_threshold 0 --fusion_stage middle --imgnet_layers 2 --weight_decay 0.01 --n_splits 1 --stage 1 --save_intermediate_ckpts --early_stop_threshold 128 --transfer_epoch 15 --device "cpu" --fine_tune  #--wandb_project "Project" --wandb
 
 
 # Stage 2

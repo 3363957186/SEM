@@ -1,5 +1,6 @@
 __all__ = ['ADRDModel']
 
+
 import wandb
 import torch
 from torch.utils.data import DataLoader
@@ -29,7 +30,6 @@ from ..utils import TransformerTrainingDataset, TransformerBalancedTrainingDatas
 from ..utils.misc import ProgressBar
 from ..utils.misc import get_metrics_multitask, print_metrics_multitask
 from ..utils.misc import convert_args_kwargs_to_kwargs
-
 
 def _manage_ctx_fit(func):
     ''' ... '''
@@ -105,7 +105,9 @@ class ADRDModel(BaseEstimator):
         wandb_project: str = "Pet_Project_test_consistency",
         early_stop_threshold: int = 15,
         transfer_epoch: int = 15,
-        stage_1_ckpt: str = "./dev/ckpt/model_stage_1.ckpt"
+        stage_1_ckpt: str = "./dev/ckpt/model_stage_1.ckpt",
+        eval_threshold: float = 0.5,
+
         
     ) -> None:  
         """Create a new ADRD model.
@@ -236,6 +238,7 @@ class ADRDModel(BaseEstimator):
         self.early_stop_threshold = early_stop_threshold
         self.transfer_epoch = transfer_epoch
         self.stage_1_ckpt = stage_1_ckpt
+        self.eval_threshold = eval_threshold
 
     @_manage_ctx_fit
     def fit(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None, img_mode=0) -> Self:
@@ -571,7 +574,9 @@ class ADRDModel(BaseEstimator):
             scores_trn[key] = torch.cat(scores_trn[key])
             y_true_trn[key] = torch.cat(y_true_trn[key])
             y_mask_trn[key] = torch.cat(y_mask_trn[key])
-            y_pred_trn[key] = (scores_trn[key] > 0).to(torch.int)
+            #y_pred_trn[key] = (scores_trn[key] > 0).to(torch.int)
+            THR = float(getattr(self, "eval_threshold", 0.3))
+            y_pred_trn[key] = (scores_trn[key] >= THR).to(torch.int)
             y_prob_trn[key] = torch.sigmoid(scores_trn[key])
     
         # print(y_mask_trn)
@@ -666,7 +671,9 @@ class ADRDModel(BaseEstimator):
             scores_vld[key] = torch.cat(scores_vld[key])
             y_true_vld[key] = torch.cat(y_true_vld[key])
             y_mask_vld[key] = torch.cat(y_mask_vld[key])
-            y_pred_vld[key] = (scores_vld[key] > 0).to(torch.int)
+            #y_pred_vld[key] = (scores_vld[key] > 0).to(torch.int)
+            THR = float(getattr(self, "eval_threshold", 0.3))
+            y_pred_vld[key] = (scores_vld[key] >= THR).to(torch.int)
             y_prob_vld[key] = torch.sigmoid(scores_vld[key])
     
         # print(y_mask_trn)
