@@ -319,3 +319,104 @@ def convert_args_kwargs_to_kwargs(func, args, kwargs):
     bound_args = signature.bind(*args, **kwargs)
     bound_args.apply_defaults()
     return bound_args.arguments
+
+
+"""
+修改后的print_metrics_multitask函数，支持保存到文件
+将这个代码替换到原来的位置，或者作为新函数添加
+"""
+
+import os
+from datetime import datetime
+
+
+def print_metrics_multitask_v2(met, save_to_file=False, save_dir="results",
+                            epoch=None, mode="", run_name=None):
+    """
+    打印并保存metrics到文件
+
+    Args:
+        met: metrics字典或列表
+        save_to_file: 是否保存到文件
+        save_dir: 保存目录
+        epoch: 当前epoch数
+        mode: 模式名称 (如 "TRN", "VLD", "TST")
+        run_name: 运行名称（可选，用于区分不同实验）
+    """
+
+    # 收集输出内容
+    output_lines = []
+
+    if type(met) is dict:
+        lbl_ks = list(met.keys())
+        met_ks = met[lbl_ks[0]].keys()
+        for met_k in met_ks:
+            if met_k not in ['Confusion Matrix']:
+                msg = '{}:\t' + '{:.4f}    ' * len(met)
+                val = [met[lbl_k][met_k] for lbl_k in lbl_ks]
+                msg = msg.format(met_k, *val)
+                msg = msg.replace('nan', '------')
+                formatted_msg = msg.expandtabs(20)
+                print(formatted_msg)
+                output_lines.append(formatted_msg)
+    else:
+        for k in met[0]:
+            if k not in ['Confusion Matrix']:
+                msg = '{}:\t' + '{:.4f}    ' * len(met)
+                val = [met[i][k] for i in range(len(met))]
+                msg = msg.format(k, *val)
+                msg = msg.replace('nan', '------')
+                formatted_msg = msg.expandtabs(20)
+                print(formatted_msg)
+                output_lines.append(formatted_msg)
+
+    # 如果需要保存到文件
+    if save_to_file:
+        os.makedirs(save_dir, exist_ok=True)
+
+        # 生成文件名（带时间戳，避免覆盖）
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        if run_name:
+            filename = f"metrics_{run_name}_epoch{epoch}_{mode}_{timestamp}.txt"
+        elif epoch is not None:
+            filename = f"metrics_epoch{epoch}_{mode}_{timestamp}.txt"
+        else:
+            filename = f"metrics_{mode}_{timestamp}.txt"
+
+        filepath = os.path.join(save_dir, filename)
+
+        # 写入单独的文件（每次运行一个新文件）
+        with open(filepath, 'w') as f:
+            f.write("=" * 60 + "\n")
+            f.write(f"Training Metrics - {mode}\n")
+            if epoch is not None:
+                f.write(f"Epoch: {epoch}\n")
+            f.write(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write("=" * 60 + "\n\n")
+
+            for line in output_lines:
+                f.write(line + "\n")
+
+            f.write("\n" + "=" * 60 + "\n")
+
+        print(f"✅ Metrics saved to: {filepath}")
+
+        # 同时追加到历史文件（所有运行的记录）
+        history_file = os.path.join(save_dir, "metrics_history.txt")
+        with open(history_file, 'a') as f:
+            if os.path.getsize(history_file) == 0 or os.path.getsize(history_file) == os.path.getsize(history_file):
+                # 如果是新文件或需要添加分隔
+                f.write("\n" + "=" * 80 + "\n")
+
+            f.write(f"[{timestamp}] Epoch {epoch} - {mode}\n")
+            f.write("-" * 80 + "\n")
+            for line in output_lines:
+                f.write(line + "\n")
+            f.write("\n")
+
+        return filepath
+
+    return None
+
+

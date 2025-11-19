@@ -1,6 +1,5 @@
 __all__ = ['ADRDModel']
 
-
 import wandb
 import torch
 from torch.utils.data import DataLoader
@@ -16,6 +15,7 @@ from contextlib import suppress
 from typing import Any, Self, Type
 from functools import wraps
 from tqdm import tqdm
+
 Tensor = Type[torch.Tensor]
 Module = Type[torch.nn.Module]
 
@@ -26,13 +26,16 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 from .. import nn
 from ..nn import Transformer
-from ..utils import TransformerTrainingDataset, TransformerBalancedTrainingDataset, TransformerValidationDataset, TransformerTestingDataset, Transformer2ndOrderBalancedTrainingDataset
+from ..utils import TransformerTrainingDataset, TransformerBalancedTrainingDataset, TransformerValidationDataset, \
+    TransformerTestingDataset, Transformer2ndOrderBalancedTrainingDataset
 from ..utils.misc import ProgressBar
 from ..utils.misc import get_metrics_multitask, print_metrics_multitask
 from ..utils.misc import convert_args_kwargs_to_kwargs
 
+
 def _manage_ctx_fit(func):
     ''' ... '''
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         # format arguments
@@ -47,7 +50,41 @@ def _manage_ctx_fit(func):
             rtn = func(**kwargs)
             kwargs['self'].to(default_device)
             return rtn
+
     return wrapper
+
+
+def get_device(device_name: str) -> torch.device:
+    """
+    获取可用的计算设备
+
+    Args:
+        device_name: 'cpu', 'cuda', 'mps' 或 'auto'
+
+    Returns:
+        torch.device对象
+    """
+    if device_name == 'auto':
+        if torch.cuda.is_available():
+            return torch.device('cuda')
+        elif torch.backends.mps.is_available():
+            return torch.device('mps')
+        else:
+            return torch.device('cpu')
+    elif device_name == 'mps':
+        if torch.backends.mps.is_available():
+            return torch.device('mps')
+        else:
+            print("警告: MPS不可用，回退到CPU")
+            return torch.device('cpu')
+    elif device_name == 'cuda':
+        if torch.cuda.is_available():
+            return torch.device('cuda')
+        else:
+            print("警告: CUDA不可用，回退到CPU")
+            return torch.device('cpu')
+    else:
+        return torch.device('cpu')
 
 
 class ADRDModel(BaseEstimator):
@@ -58,58 +95,58 @@ class ADRDModel(BaseEstimator):
     user-friendly operation, the ADRDModel is derived from 
     ``sklearn.base.BaseEstimator``, ensuring compliance with the well-established 
     API design conventions of scikit-learn.
-    """    
+    """
+
     def __init__(self,
-        src_modalities: dict[str, dict[str, Any]],
-        tgt_modalities: dict[str, dict[str, Any]],
-        label_fractions: dict[str, float],
-        d_model: int = 32,
-        nhead: int = 1,
-        num_encoder_layers: int = 1,
-        num_decoder_layers: int = 1,
-        num_epochs: int = 32,
-        batch_size: int = 8,
-        batch_size_multiplier: int = 1,
-        lr: float = 1e-2,
-        weight_decay: float = 0.0,
-        beta: float = 0.9999,
-        gamma: float = 2.0,
-        criterion: str | None = None,
-        device: str = 'cpu',
-        cuda_devices: list = [1],
-        img_net: str | None = None,
-        imgnet_layers: int | None = 2,
-        img_size: int | None = 128,
-        fusion_stage: str = 'middle',
-        patch_size: int | None = 16,
-        imgnet_ckpt: str | None = None,
-        train_imgnet: bool = False,
-        ckpt_path: str = './adrd_tool/adrd/dev/ckpt/ckpt.pt',
-        load_from_ckpt: bool = False,
-        save_intermediate_ckpts: bool = False,
-        data_parallel: bool = False,
-        verbose: int = 0,
-        wandb_ = 0,
-        balanced_sampling: bool = False,
-        label_distribution: dict = {},
-        ranking_loss: bool = False,
-        _device_ids: list | None = None,
+                 src_modalities: dict[str, dict[str, Any]],
+                 tgt_modalities: dict[str, dict[str, Any]],
+                 label_fractions: dict[str, float],
+                 d_model: int = 32,
+                 nhead: int = 1,
+                 num_encoder_layers: int = 1,
+                 num_decoder_layers: int = 1,
+                 num_epochs: int = 32,
+                 batch_size: int = 8,
+                 batch_size_multiplier: int = 1,
+                 lr: float = 1e-2,
+                 weight_decay: float = 0.0,
+                 beta: float = 0.9999,
+                 gamma: float = 2.0,
+                 criterion: str | None = None,
+                 device: str = 'cpu',
+                 cuda_devices: list = [1],
+                 img_net: str | None = None,
+                 imgnet_layers: int | None = 2,
+                 img_size: int | None = 128,
+                 fusion_stage: str = 'middle',
+                 patch_size: int | None = 16,
+                 imgnet_ckpt: str | None = None,
+                 train_imgnet: bool = False,
+                 ckpt_path: str = './adrd_tool/adrd/dev/ckpt/ckpt.pt',
+                 load_from_ckpt: bool = False,
+                 save_intermediate_ckpts: bool = False,
+                 data_parallel: bool = False,
+                 verbose: int = 0,
+                 wandb_=0,
+                 balanced_sampling: bool = False,
+                 label_distribution: dict = {},
+                 ranking_loss: bool = False,
+                 _device_ids: list | None = None,
 
-        _dataloader_num_workers: int = 4,
-        _amp_enabled: bool = False,
-        split_id: int = 0,
-        stage: int = 1,
-        lambda_coeff: float = 0.025,
-        margin: float = 0.25,
-        fine_tune: bool = True,
-        wandb_project: str = "Pet_Project_test_consistency",
-        early_stop_threshold: int = 15,
-        transfer_epoch: int = 15,
-        stage_1_ckpt: str = "./dev/ckpt/model_stage_1.ckpt",
-        eval_threshold: float = 0.5,
+                 _dataloader_num_workers: int = 4,
+                 _amp_enabled: bool = False,
+                 split_id: int = 0,
+                 stage: int = 1,
+                 lambda_coeff: float = 0.025,
+                 margin: float = 0.25,
+                 fine_tune: bool = True,
+                 wandb_project: str = "Pet_Project_test_consistency",
+                 early_stop_threshold: int = 15,
+                 transfer_epoch: int = 15,
+                 stage_1_ckpt: str = "./dev/ckpt/model_stage_1.ckpt",
+                 eval_threshold: float = 0.5,
 
-        
-    ) -> None:  
+                 ) -> None:
         """Create a new ADRD model.
 
         :param src_modalities: _description_
@@ -142,7 +179,8 @@ class ADRDModel(BaseEstimator):
         :type gamma: float, optional
         :param criterion: The criterion to select the best model, defaults to None
         :type criterion: str | None, optional
-        :param device: 'cuda' or 'cpu', defaults to 'cpu'
+        #:param device: 'cuda' or 'cpu', defaults to 'cpu'
+        :param device: 'cuda', 'mps', 'cpu', or 'auto' (自动选择最佳设备), defaults to 'cpu'
         :type device: str, optional
         :param cuda_devices: A list of gpu numbers to data parallel training. The device must be set to 'cuda' and data_parallel must be set to True, defaults to [1]
         :type cuda_devices: list, optional
@@ -207,7 +245,13 @@ class ADRDModel(BaseEstimator):
         self.beta = beta
         self.gamma = gamma
         self.criterion = criterion
+        # self.device = device
         self.device = device
+        # 确保设备类型正确
+        if isinstance(self.device, str):
+            self.device = get_device(self.device)
+        elif not isinstance(self.device, torch.device):
+            self.device = torch.device(self.device)
         self.cuda_devices = cuda_devices
         self.img_net = img_net
         self.patch_size = patch_size
@@ -228,13 +272,18 @@ class ADRDModel(BaseEstimator):
         self._device_ids = _device_ids
         self._dataloader_num_workers = _dataloader_num_workers
         self._amp_enabled = _amp_enabled
-        self.scaler = torch.cuda.amp.GradScaler()
+        # self.scaler = torch.cuda.amp.GradScaler()
+        # 根据设备类型初始化GradScaler
+        if str(self.device).startswith('cuda'):
+            self.scaler = torch.cuda.amp.GradScaler()
+        else:
+            self.scaler = None  # MPS和CPU不需要CUDA的GradScaler
         self.fine_tune = fine_tune
         self.split_id = split_id
         self.stage = stage
         self.lambda_coeff = lambda_coeff
         self.margin = margin
-        self.wandb_project=wandb_project
+        self.wandb_project = wandb_project
         self.early_stop_threshold = early_stop_threshold
         self.transfer_epoch = transfer_epoch
         self.stage_1_ckpt = stage_1_ckpt
@@ -242,32 +291,32 @@ class ADRDModel(BaseEstimator):
 
     @_manage_ctx_fit
     def fit(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None, img_mode=0) -> Self:
-    # def fit(self, x, y) -> Self:
+        # def fit(self, x, y) -> Self:
         ''' ... '''
-        
+
         # start a new wandb run to track this script
         if self.wandb_ == 1:
             wandb.init(
                 # set the wandb project where this run will be logged
                 project=self.wandb_project,
-                
+
                 # track hyperparameters and run metadata
                 config={
-                "Loss": 'Focalloss',
-                "ranking_loss": self.ranking_loss,
-                "img architecture": self.img_net,
-                "EMB": "ALL_SEQ",
-                "epochs": self.num_epochs,
-                "d_model": self.d_model,
-                # 'positional encoding': 'Diff PE',
-                'Balanced Sampling': self.balanced_sampling,
-                'Shared CNN': 'Yes',
+                    "Loss": 'Focalloss',
+                    "ranking_loss": self.ranking_loss,
+                    "img architecture": self.img_net,
+                    "EMB": "ALL_SEQ",
+                    "epochs": self.num_epochs,
+                    "d_model": self.d_model,
+                    # 'positional encoding': 'Diff PE',
+                    'Balanced Sampling': self.balanced_sampling,
+                    'Shared CNN': 'Yes',
                 }
             )
             wandb.run.log_code(".")
         else:
-            wandb.init(mode="disabled") 
-        # for PyTorch computational efficiency
+            wandb.init(mode="disabled")
+            # for PyTorch computational efficiency
         torch.set_num_threads(1)
         # print(img_train_trans)
         # initialize neural network
@@ -276,7 +325,7 @@ class ADRDModel(BaseEstimator):
         print(f"Batch size: {self.batch_size}")
         print(f"Batch size multiplier: {self.batch_size_multiplier}")
 
-        if img_mode in [0,1,2]:
+        if img_mode in [0, 1, 2]:
             for k, info in self.src_modalities.items():
                 if info['type'] == 'imaging':
                     if 'densenet' in self.img_net.lower() and 'emb' not in self.img_net.lower():
@@ -288,17 +337,16 @@ class ADRDModel(BaseEstimator):
                     elif 'swinunetr' in self.img_net.lower():
                         info['shape'] = (1, 768, 8, 8, 8)
                         info['img_shape'] = (1, 768, 8, 8, 8)
-        
-            
+
         # initialize the ranking loss
         if self.ranking_loss:
-            self.lambda_coeff =  self.lambda_coeff
+            self.lambda_coeff = self.lambda_coeff
             self.margin = self.margin
             self.margin_loss = torch.nn.MarginRankingLoss(reduction='sum', margin=self.margin)
-        
-        
+
         self._init_net()
-        ldr_trn, ldr_vld = self._init_dataloader(x_trn, x_vld, y_trn, y_vld, img_train_trans=img_train_trans, img_vld_trans=img_vld_trans)
+        ldr_trn, ldr_vld = self._init_dataloader(x_trn, x_vld, y_trn, y_vld, img_train_trans=img_train_trans,
+                                                 img_vld_trans=img_vld_trans)
 
         # initialize optimizer and scheduler
         if not self.load_from_ckpt:
@@ -306,10 +354,16 @@ class ADRDModel(BaseEstimator):
         self.scheduler = self._init_scheduler(self.optimizer)
 
         # gradient scaler for AMP
-        if self._amp_enabled: 
-            self.scaler = torch.cuda.amp.GradScaler()
+        # if self._amp_enabled:
+        #    self.scaler = torch.cuda.amp.GradScaler()
 
-        # initialize the focal losses 
+        if self._amp_enabled and str(self.device).startswith('cuda'):
+            self.scaler = torch.cuda.amp.GradScaler()
+        elif self._amp_enabled:
+            print("警告: AMP在MPS/CPU上的支持有限，可能会禁用某些优化")
+        self.scaler = None
+
+        # initialize the focal losses
         self.loss_fn = {}
 
         for k in self.tgt_modalities:
@@ -322,9 +376,9 @@ class ADRDModel(BaseEstimator):
                     alpha = pow((1 - self.label_fractions[k][1]), 2)
             # alpha = -1
             self.loss_fn[k] = nn.SigmoidFocalLoss(
-                alpha = alpha,
-                gamma = self.gamma,
-                reduction = 'none',
+                alpha=alpha,
+                gamma=self.gamma,
+                reduction='none',
             )
 
         # to record the best validation performance criterion
@@ -338,11 +392,11 @@ class ADRDModel(BaseEstimator):
         if self.verbose == 1:
             with self._lock if self._lock is not None else suppress():
                 pbr_epoch = tqdm.tqdm(
-                    desc = 'Rank {:02d}'.format(self._rank),
-                    total = self.num_epochs,
-                    position = self._rank,
-                    ascii = True,
-                    leave = False,
+                    desc='Rank {:02d}'.format(self._rank),
+                    total=self.num_epochs,
+                    position=self._rank,
+                    ascii=True,
+                    leave=False,
                     bar_format='{l_bar}{r_bar}'
                 )
 
@@ -351,35 +405,35 @@ class ADRDModel(BaseEstimator):
             self.skip_embedding[k] = False
 
         self.grad_list = []
+
         # Define a hook function to print and store the gradient of a layer
         def print_and_store_grad(grad):
             self.grad_list.append(grad)
             # print(grad)
-            
+
         self.early_stopping = 0
-        
-        
+
         # training loop
         for epoch in range(self.start_epoch, self.num_epochs):
             met_trn = self.train_one_epoch(ldr_trn, epoch)
             met_vld = self.validate_one_epoch(ldr_vld, epoch)
-            
+
             print(self.ckpt_path.split('/')[-1])
 
             # save the model if it has the best validation performance criterion by far
             if self.criterion is None: continue
-            
+
             # is current criterion better than previous best?
             curr_crit_AUPR = np.mean([met_vld[k][self.criterion] for k in met_vld])
             curr_crit_AUROC = np.mean([met_vld[k]["AUC (ROC)"] for k in met_vld])
-            
+
             # AUROC
             if self.early_stopping <= self.early_stop_threshold:
                 if best_crit_AUPR is None or np.isnan(best_crit_AUPR):
                     is_better_AUPR = True
                 elif self.criterion == 'Loss' and best_crit_AUPR >= curr_crit_AUPR:
                     is_better_AUPR = True
-                elif self.criterion != 'Loss' and best_crit_AUPR <= curr_crit_AUPR :
+                elif self.criterion != 'Loss' and best_crit_AUPR <= curr_crit_AUPR:
                     is_better_AUPR = True
                 else:
                     is_better_AUPR = False
@@ -390,7 +444,7 @@ class ADRDModel(BaseEstimator):
                     is_better_AUROC = True
                 else:
                     is_better_AUROC = False
-                
+
             # update best criterion
             if is_better_AUPR and self.early_stopping <= self.early_stop_threshold:
                 best_crit_AUPR = curr_crit_AUPR
@@ -398,18 +452,17 @@ class ADRDModel(BaseEstimator):
                     print(f"Saving the model to {self.ckpt_path[:-3]}_AUPR_{self.split_id}.pt...")
                     self.save(f"{self.ckpt_path[:-3]}_AUPR_split_{self.split_id}.pt", epoch)
                 self.early_stopping = 0
-                    
+
             if is_better_AUROC and self.early_stopping <= self.early_stop_threshold:
                 best_crit_AUROC = curr_crit_AUROC
                 if self.save_intermediate_ckpts:
                     print(f"Saving the model to {self.ckpt_path[:-3]}_AUROC_{self.split_id}.pt...")
                     self.save(f"{self.ckpt_path[:-3]}_AUROC_split_{self.split_id}.pt", epoch)
                 self.early_stopping = 0
-            
+
             print(is_better_AUPR, is_better_AUROC)
             if (not is_better_AUPR) and (not is_better_AUROC):
                 self.early_stopping += 1
-                
 
             if self.verbose > 2:
                 print('Best {}: {}'.format('AUC (PR)', best_crit_AUPR))
@@ -421,34 +474,31 @@ class ADRDModel(BaseEstimator):
                 with self._lock if self._lock is not None else suppress():
                     pbr_epoch.update(1)
                     pbr_epoch.refresh()
-                    
-                    
+
             print(self.early_stopping)
-            
+
             if self.early_stop_threshold > 0:
-                if self.early_stopping > self.early_stop_threshold: # and self.early_stopping_tau_reg > self.early_stop_threshold:
+                if self.early_stopping > self.early_stop_threshold:  # and self.early_stopping_tau_reg > self.early_stop_threshold:
                     print(f"Early stopping at epoch {epoch}")
                     return self
-            
-            
 
         if self.verbose == 1:
             with self._lock if self._lock is not None else suppress():
                 pbr_epoch.close()
-                
+
         wandb.log({"mean AUROC": curr_crit_AUROC}, step=epoch)
 
         return self
-    
+
     def train_one_epoch(self, ldr_trn, epoch):
         # progress bar for batch loops
-        if self.verbose > 1: 
+        if self.verbose > 1:
             pbr_batch = ProgressBar(len(ldr_trn.dataset), 'Epoch {:03d} (TRN)'.format(epoch))
 
         # set model to train mode
         torch.set_grad_enabled(True)
         self.net_.train()
-        
+
         scores_trn = {}
         y_true_trn = {}
         y_mask_trn = {}
@@ -456,7 +506,7 @@ class ADRDModel(BaseEstimator):
         y_prob_trn = {}
         losses_trn = {k: [] for k in self.tgt_modalities}
         iters = len(ldr_trn)
-        
+
         if self.fine_tune and self.stage == 1:
             if epoch < self.transfer_epoch:
                 frozen_cnt = 0
@@ -472,22 +522,42 @@ class ADRDModel(BaseEstimator):
                         param.requires_grad = True
                         unfrozen_cnt += 1
                 print(f"{unfrozen_cnt} Transformer parameters unfrozen")
-        
+
         for n_iter, (x_batch, y_batch, mask, y_mask) in enumerate(ldr_trn):
             # mount data to the proper device
             x_batch = {k: x_batch[k].to(self.device) for k in x_batch}
             y_batch = {k: y_batch[k].to(torch.float).to(self.device) for k in y_batch}
             mask = {k: mask[k].to(self.device) for k in mask}
             y_mask = {k: y_mask[k].to(self.device) for k in y_mask}
-            
-            with torch.autocast(
-                device_type = 'cpu' if self.device == 'cpu' else 'cuda',
-                dtype = torch.bfloat16 if self.device == 'cpu' else torch.float16,
-                enabled = self._amp_enabled,
-            ):
 
+            # with torch.autocast(
+            #    device_type = 'cpu' if self.device == 'cpu' else 'cuda',
+            #    dtype = torch.bfloat16 if self.device == 'cpu' else torch.float16,
+            #     enabled = self._amp_enabled,
+            # ):
+
+            # 根据设备类型确定autocast参数
+            device_str = str(self.device)
+            if device_str == 'cpu':
+                autocast_device = 'cpu'
+                autocast_dtype = torch.bfloat16
+            elif device_str.startswith('cuda'):
+                autocast_device = 'cuda'
+                autocast_dtype = torch.float16
+            elif device_str.startswith('mps'):
+                autocast_device = 'cpu'  # MPS目前使用CPU的autocast
+                autocast_dtype = torch.float16
+            else:
+                autocast_device = 'cpu'
+                autocast_dtype = torch.bfloat16
+
+            with torch.autocast(
+                    device_type=autocast_device,
+                    dtype=autocast_dtype,
+                    enabled=self._amp_enabled,
+            ):
                 outputs = self.net_(x_batch, mask, skip_embedding=self.skip_embedding)
-                
+
                 # calculate multitask loss
                 loss = 0
 
@@ -497,50 +567,50 @@ class ADRDModel(BaseEstimator):
                         loss = 0
                     else:
                         for i, k in enumerate(self.tgt_modalities):
-                           for ii, kk in enumerate(self.tgt_modalities):
-                               if ii>i:
-                                   pairs = (y_mask[k] == 1) & (y_mask[kk] == 1)
-                                   total_elements = (torch.abs(y_batch[k][pairs]-y_batch[kk][pairs])).sum()
-                                   if  total_elements != 0:
-                                       loss += self.lambda_coeff * (self.margin_loss(torch.sigmoid(outputs[k])[pairs],torch.sigmoid(outputs[kk][pairs]),y_batch[k][pairs]-y_batch[kk][pairs]))/total_elements
+                            for ii, kk in enumerate(self.tgt_modalities):
+                                if ii > i:
+                                    pairs = (y_mask[k] == 1) & (y_mask[kk] == 1)
+                                    total_elements = (torch.abs(y_batch[k][pairs] - y_batch[kk][pairs])).sum()
+                                    if total_elements != 0:
+                                        loss += self.lambda_coeff * (self.margin_loss(torch.sigmoid(outputs[k])[pairs],
+                                                                                      torch.sigmoid(outputs[kk][pairs]),
+                                                                                      y_batch[k][pairs] - y_batch[kk][
+                                                                                          pairs])) / total_elements
 
                 for i, k in enumerate(self.tgt_modalities):
-                    
                     loss_task = self.loss_fn[k](outputs[k], y_batch[k])
                     msk_loss_task = loss_task * y_mask[k]
                     msk_loss_mean = msk_loss_task.sum() / y_mask[k].sum()
                     # msk_loss_mean = msk_loss_task.sum()
                     loss += msk_loss_mean
                     losses_trn[k] += msk_loss_task.detach().cpu().numpy().tolist()
-                
+
             if epoch < self.transfer_epoch and self.stage == 1:
                 for name, param in self.net_.named_parameters():
                     if name in self.params_copied:
                         assert param.requires_grad == False, f"{name} should be frozen but isn't!"
-                        
 
             loss = loss / self.batch_size_multiplier
-            if self._amp_enabled:
+            if self._amp_enabled and self.scaler is not None:
                 self.scaler.scale(loss).backward()
             else:
                 loss.backward()
-                
+
             torch.nn.utils.clip_grad_norm_(self.net_.parameters(), max_norm=1.0)
 
             if len(self.grad_list) > 0:
                 print(len(self.grad_list), len(self.grad_list[-1]))
                 print(f"Gradient at {n_iter}: {self.grad_list[-1][0]}")
-            
+
             # update parameters
             if n_iter != 0 and n_iter % self.batch_size_multiplier == 0:
-                if self._amp_enabled:
+                if self._amp_enabled and self.scaler is not None:
                     self.scaler.step(self.optimizer)
                     self.scaler.update()
                     self.optimizer.zero_grad()
-                else: 
+                else:
                     self.optimizer.step()
                     self.optimizer.zero_grad()
-                
 
             for key in outputs.keys():
                 # save outputs to evaluate performance later
@@ -548,11 +618,11 @@ class ADRDModel(BaseEstimator):
                     scores_trn[key] = []
                     y_true_trn[key] = []
                     y_mask_trn[key] = []
-                
+
                 scores_trn[key].append(outputs[key].detach().to(torch.float).cpu())
                 y_true_trn[key].append(y_batch[key].cpu())
                 y_mask_trn[key].append(y_mask[key].cpu())
-            
+
             # update progress bar
             if self.verbose > 1:
                 batch_size = len(next(iter(x_batch.values())))
@@ -560,9 +630,9 @@ class ADRDModel(BaseEstimator):
                 pbr_batch.refresh()
 
             # clear cuda cache
-            if "cuda" in self.device:
+            if str(self.device).startswith('cuda'):
                 torch.cuda.empty_cache()
-        
+
         self.scheduler.step(epoch)
 
         # for better tqdm progress bar display
@@ -574,11 +644,9 @@ class ADRDModel(BaseEstimator):
             scores_trn[key] = torch.cat(scores_trn[key])
             y_true_trn[key] = torch.cat(y_true_trn[key])
             y_mask_trn[key] = torch.cat(y_mask_trn[key])
-            #y_pred_trn[key] = (scores_trn[key] > 0).to(torch.int)
-            THR = float(getattr(self, "eval_threshold", 0.3))
-            y_pred_trn[key] = (scores_trn[key] >= THR).to(torch.int)
+            y_pred_trn[key] = (scores_trn[key] > 0).to(torch.int)
             y_prob_trn[key] = torch.sigmoid(scores_trn[key])
-    
+
         # print(y_mask_trn)
         met_trn = get_metrics_multitask(
             y_true_trn,
@@ -590,20 +658,19 @@ class ADRDModel(BaseEstimator):
         # add loss to metrics
         for k in met_trn:
             met_trn[k]['Loss'] = np.mean(losses_trn[k])
-        
+
         # log metrics to wandb
         wandb.log({f"Train loss {k}": met_trn[k]['Loss'] for k in met_trn}, step=epoch)
         wandb.log({f"Train Balanced Accuracy {k}": met_trn[k]['Balanced Accuracy'] for k in met_trn}, step=epoch)
-        
+
         wandb.log({f"Train AUC (ROC) {k}": met_trn[k]['AUC (ROC)'] for k in met_trn}, step=epoch)
         wandb.log({f"Train AUPR {k}": met_trn[k]['AUC (PR)'] for k in met_trn}, step=epoch)
-        
 
         if self.verbose > 2:
             print_metrics_multitask(met_trn)
-            
+
         return met_trn
-    
+
     def validate_one_epoch(self, ldr_vld, epoch):
         # # progress bar for validation
         if self.verbose > 1:
@@ -627,12 +694,13 @@ class ADRDModel(BaseEstimator):
             y_mask = {k: y_mask[k].to(self.device) for k in y_mask}
 
             # forward
+            device_str = str(self.device)
             with torch.autocast(
-                device_type = 'cpu' if self.device == 'cpu' else 'cuda',
-                dtype = torch.bfloat16 if self.device == 'cpu' else torch.float16,
-                enabled = self._amp_enabled
+                    device_type='cpu' if device_str == 'cpu' or device_str.startswith('mps') else 'cuda',
+                    dtype=torch.bfloat16 if device_str == 'cpu' else torch.float16,
+                    enabled=self._amp_enabled
             ):
-                
+
                 outputs = self.net_(x_batch, mask, skip_embedding=self.skip_embedding)
 
                 # calculate multitask loss
@@ -647,7 +715,7 @@ class ADRDModel(BaseEstimator):
                     scores_vld[key] = []
                     y_true_vld[key] = []
                     y_mask_vld[key] = []
-                
+
                 scores_vld[key].append(outputs[key].detach().to(torch.float).cpu())
                 y_true_vld[key].append(y_batch[key].cpu())
                 y_mask_vld[key].append(y_mask[key].cpu())
@@ -659,7 +727,7 @@ class ADRDModel(BaseEstimator):
                 pbr_batch.refresh()
 
             # clear cuda cache
-            if "cuda" in self.device:
+            if str(self.device).startswith('cuda'):
                 torch.cuda.empty_cache()
 
         # for better tqdm progress bar display
@@ -671,11 +739,9 @@ class ADRDModel(BaseEstimator):
             scores_vld[key] = torch.cat(scores_vld[key])
             y_true_vld[key] = torch.cat(y_true_vld[key])
             y_mask_vld[key] = torch.cat(y_mask_vld[key])
-            #y_pred_vld[key] = (scores_vld[key] > 0).to(torch.int)
-            THR = float(getattr(self, "eval_threshold", 0.3))
-            y_pred_vld[key] = (scores_vld[key] >= THR).to(torch.int)
+            y_pred_vld[key] = (scores_vld[key] > 0).to(torch.int)
             y_prob_vld[key] = torch.sigmoid(scores_vld[key])
-    
+
         # print(y_mask_trn)
         met_vld = get_metrics_multitask(
             y_true_vld,
@@ -683,37 +749,36 @@ class ADRDModel(BaseEstimator):
             y_prob_vld,
             y_mask_vld
         )
-    
+
         # add loss to metrics
         for k in met_vld:
             met_vld[k]['Loss'] = np.mean(losses_vld[k])
-        
+
         # log metrics to wandb
         wandb.log({f"Validation loss {k}": met_vld[k]['Loss'] for k in met_vld}, step=epoch)
         wandb.log({f"Validation Balanced Accuracy {k}": met_vld[k]['Balanced Accuracy'] for k in met_vld}, step=epoch)
-        
+
         wandb.log({f"Validation AUC (ROC) {k}": met_vld[k]['AUC (ROC)'] for k in met_vld}, step=epoch)
         wandb.log({f"Validation AUPR {k}": met_vld[k]['AUC (PR)'] for k in met_vld}, step=epoch)
 
         if self.verbose > 2:
             print_metrics_multitask(met_vld)
-        
+
         return met_vld
-        
 
     def predict_logits(self,
-        x: list[dict[str, Any]],
-        _batch_size: int | None = 128,
-        skip_embedding: dict | None = None,
-        img_transform: Any | None = None,
-    ) -> list[dict[str, float]]:
+                       x: list[dict[str, Any]],
+                       _batch_size: int | None = 128,
+                       skip_embedding: dict | None = None,
+                       img_transform: Any | None = None,
+                       ) -> list[dict[str, float]]:
         '''
         The input x can be a single sample or a list of samples.
         '''
         # input validation
         check_is_fitted(self)
         print(self.device)
-        
+
         # for PyTorch computational efficiency
         torch.set_num_threads(1)
 
@@ -724,12 +789,12 @@ class ADRDModel(BaseEstimator):
         # intialize dataset and dataloader object
         dat = TransformerTestingDataset(x, self.src_modalities, img_transform=img_transform)
         ldr = DataLoader(
-            dataset = dat,
-            batch_size = _batch_size if _batch_size is not None else len(x),
-            shuffle = False,
-            drop_last = False,
-            num_workers = 0,
-            collate_fn = TransformerTestingDataset.collate_fn,
+            dataset=dat,
+            batch_size=_batch_size if _batch_size is not None else len(x),
+            shuffle=False,
+            drop_last=False,
+            num_workers=0,
+            collate_fn=TransformerTestingDataset.collate_fn,
         )
         # print("dataloader done")
 
@@ -742,13 +807,13 @@ class ADRDModel(BaseEstimator):
             # print(x_batch['WB_T2st_EMBED'][-1])
             # print(mask['WB_T2st_EMBED'])
             # raise ValueError
-            x_batch = {k: x_batch[k].to(self.device) for k in x_batch} 
+            x_batch = {k: x_batch[k].to(self.device) for k in x_batch}
             mask = {k: mask[k].to(self.device) for k in mask}
 
             # forward
             output: dict[str, Tensor] = self.net_(x_batch, mask, skip_embedding)
             outputs += self.net_(x_batch, mask, skip_embedding, return_out_emb=True).cpu().numpy().tolist()
-            
+
             # convert output from dict-of-list to list of dict, then append
             tmp = {k: output[k].tolist() for k in self.tgt_modalities}
             tmp = [{k: tmp[k][i] for k in self.tgt_modalities} for i in range(len(next(iter(tmp.values()))))]
@@ -756,38 +821,41 @@ class ADRDModel(BaseEstimator):
 
         return logits, outputs
         # return logits
-        
+
     def predict_proba(self,
-        x: list[dict[str, Any]],
-        skip_embedding: dict | None = None,
-        temperature: float = 1.0,
-        _batch_size: int | None = 128,
-        img_transform: Any | None = None,
-    ) -> list[dict[str, float]]:
+                      x: list[dict[str, Any]],
+                      skip_embedding: dict | None = None,
+                      temperature: float = 1.0,
+                      _batch_size: int | None = 128,
+                      img_transform: Any | None = None,
+                      ) -> tuple[dict[str, float], list[dict[str, Any]], dict[str, float]]:
         ''' ... '''
-        logits, outputs = self.predict_logits(x=x, _batch_size=_batch_size, img_transform=img_transform, skip_embedding=skip_embedding)
+        logits, outputs = self.predict_logits(x=x, _batch_size=_batch_size, img_transform=img_transform,
+                                              skip_embedding=skip_embedding)
         # logits = self.predict_logits(x=x, _batch_size=_batch_size, img_transform=img_transform, skip_embedding=skip_embedding)
 
         print("got logits")
         return logits, [{k: expit(smp[k] / temperature) for k in self.tgt_modalities} for smp in logits], outputs
 
     def predict(self,
-        x: list[dict[str, Any]],
-        skip_embedding: dict | None = None,
-        fpr: dict[str, Any] | None = None,
-        tpr: dict[str, Any] | None = None,
-        thresholds: dict[str, Any] | None = None,
-        _batch_size: int | None = 128,
-        img_transform: Any | None = None,
-    ) -> list[dict[str, int]]:
+                x: list[dict[str, Any]],
+                skip_embedding: dict | None = None,
+                fpr: dict[str, Any] | None = None,
+                tpr: dict[str, Any] | None = None,
+                thresholds: dict[str, Any] | None = None,
+                _batch_size: int | None = 128,
+                img_transform: Any | None = None,
+                ) -> list[dict[str, int]]:
         ''' ... '''
         if fpr is None or tpr is None or thresholds is None:
-            logits, proba, outputs = self.predict_proba(x, _batch_size=_batch_size, img_transform=img_transform, skip_embedding=skip_embedding)
+            logits, proba, outputs = self.predict_proba(x, _batch_size=_batch_size, img_transform=img_transform,
+                                                        skip_embedding=skip_embedding)
             # logits, proba = self.predict_proba(x, _batch_size=_batch_size, img_transform=img_transform, skip_embedding=skip_embedding)
             print("got proba")
             return logits, proba, [{k: int(smp[k] > 0.5) for k in self.tgt_modalities} for smp in proba], outputs
         else:
-            logits, proba, outputs = self.predict_proba(x, _batch_size=_batch_size, img_transform=img_transform, skip_embedding=skip_embedding)
+            logits, proba, outputs = self.predict_proba(x, _batch_size=_batch_size, img_transform=img_transform,
+                                                        skip_embedding=skip_embedding)
             # logits, proba = self.predict_proba(x, _batch_size=_batch_size, img_transform=img_transform, skip_embedding=skip_embedding)
             print("got proba")
             youden_index = {}
@@ -806,7 +874,7 @@ class ADRDModel(BaseEstimator):
         :type filepath: str
         :param epoch: _description_
         :type epoch: int
-        """        
+        """
         check_is_fitted(self)
         if self.data_parallel:
             state_dict = self.net_.module.state_dict()
@@ -845,7 +913,7 @@ class ADRDModel(BaseEstimator):
         :type map_location: str, optional
         :param img_dict: _description_, defaults to None
         :type img_dict: _type_, optional
-        """        
+        """
         # load state_dict
         state_dict = torch.load(filepath, map_location=map_location)
 
@@ -872,19 +940,19 @@ class ADRDModel(BaseEstimator):
             self.imgnet_ckpt = state_dict.pop('imgnet_ckpt')
             self.train_imgnet = state_dict.pop('train_imgnet')
         else:
-            self.img_net  = img_dict['img_net']
-            self.imgnet_layers  = img_dict['imgnet_layers']
-            self.img_size  = img_dict['img_size']
-            self.patch_size  = img_dict['patch_size']
-            self.imgnet_ckpt  = img_dict['imgnet_ckpt']
-            self.train_imgnet  = img_dict['train_imgnet']
+            self.img_net = img_dict['img_net']
+            self.imgnet_layers = img_dict['imgnet_layers']
+            self.img_size = img_dict['img_size']
+            self.patch_size = img_dict['patch_size']
+            self.imgnet_ckpt = img_dict['imgnet_ckpt']
+            self.train_imgnet = img_dict['train_imgnet']
             state_dict.pop('img_net')
             state_dict.pop('imgnet_layers')
             state_dict.pop('img_size')
             state_dict.pop('patch_size')
             state_dict.pop('imgnet_ckpt')
             state_dict.pop('train_imgnet')
-            
+
         for k, info in self.src_modalities.items():
             if info['type'] == 'imaging':
                 if 'emb' not in self.img_net.lower():
@@ -895,9 +963,11 @@ class ADRDModel(BaseEstimator):
                     info['img_shape'] = (1, 768, 8, 8, 8)
                 # print(info['shape'])
 
-        self.net_ = Transformer(self.src_modalities, self.tgt_modalities, self.d_model, self.nhead, self.num_encoder_layers, self.num_decoder_layers, self.device, self.cuda_devices, self.img_net, self.imgnet_layers, self.img_size, self.patch_size, self.imgnet_ckpt, self.train_imgnet, self.fusion_stage)
+        self.net_ = Transformer(self.src_modalities, self.tgt_modalities, self.d_model, self.nhead,
+                                self.num_encoder_layers, self.num_decoder_layers, self.device, self.cuda_devices,
+                                self.img_net, self.imgnet_layers, self.img_size, self.patch_size, self.imgnet_ckpt,
+                                self.train_imgnet, self.fusion_stage)
 
-       
         if 'scaler' in state_dict and state_dict['scaler']:
             self.scaler.load_state_dict(state_dict.pop('scaler'))
         self.net_.load_state_dict(state_dict)
@@ -905,21 +975,21 @@ class ADRDModel(BaseEstimator):
         self.net_.to(self.device)
 
     def to(self, device: str) -> Self:
-        """Mount the model to the given device. 
+        """Mount the model to the given device.
 
         :param device: _description_
         :type device: str
         :return: _description_
         :rtype: Self
-        """        
+        """
         self.device = device
         if hasattr(self, 'model'): self.net_ = self.net_.to(device)
         if hasattr(self, 'img_model'): self.img_model = self.img_model.to(device)
         return self
-    
+
     @classmethod
     def from_ckpt(cls, filepath: str, device='cpu', img_dict=None) -> Self:
-        """Create a new ADRD model and load parameters from the checkpoint. 
+        """Create a new ADRD model and load parameters from the checkpoint.
 
         This is an alternative constructor.
 
@@ -931,21 +1001,23 @@ class ADRDModel(BaseEstimator):
         :type img_dict: _type_, optional
         :return: _description_
         :rtype: Self
-        """ 
-        obj = cls(None, None, None,device=device)
+        """
+        obj = cls(None, None, None, device=device)
         if device == 'cuda':
             obj.device = "{}:{}".format(obj.device, str(obj.cuda_devices[0]))
         print(obj.device)
         obj.load(filepath, map_location=obj.device, img_dict=img_dict)
         return obj
-    
+
     def _init_net(self):
         """ ... """
         # set the device for use
-        if self.device == 'cuda':
-            self.device = "{}:{}".format(self.device, str(self.cuda_devices[0]))
-        print("Device: " + self.device)
-        
+        device_str = str(self.device)
+        if device_str.startswith('cuda') and self.cuda_devices:
+            # 如果是CUDA设备且指定了具体设备ID，创建带设备ID的device对象
+            self.device = torch.device(f'cuda:{self.cuda_devices[0]}')
+        print(f"Device: {self.device}")
+
         self.start_epoch = 0
         if self.load_from_ckpt:
             try:
@@ -957,41 +1029,42 @@ class ADRDModel(BaseEstimator):
 
         if not self.load_from_ckpt:
             self.net_ = nn.Transformer(
-                src_modalities = self.src_modalities, 
-                tgt_modalities = self.tgt_modalities, 
-                d_model = self.d_model, 
-                nhead = self.nhead, 
-                num_encoder_layers = self.num_encoder_layers, 
-                num_decoder_layers = self.num_decoder_layers, 
-                device = self.device, 
-                cuda_devices = self.cuda_devices, 
-                img_net = self.img_net, 
-                layers = self.imgnet_layers, 
-                img_size = self.img_size, 
-                patch_size = self.patch_size, 
-                imgnet_ckpt = self.imgnet_ckpt, 
-                train_imgnet = self.train_imgnet,
-                fusion_stage = self.fusion_stage,
+                src_modalities=self.src_modalities,
+                tgt_modalities=self.tgt_modalities,
+                d_model=self.d_model,
+                nhead=self.nhead,
+                num_encoder_layers=self.num_encoder_layers,
+                num_decoder_layers=self.num_decoder_layers,
+                device=self.device,
+                cuda_devices=self.cuda_devices,
+                img_net=self.img_net,
+                layers=self.imgnet_layers,
+                img_size=self.img_size,
+                patch_size=self.patch_size,
+                imgnet_ckpt=self.imgnet_ckpt,
+                train_imgnet=self.train_imgnet,
+                fusion_stage=self.fusion_stage,
             )
-            
+
             for name, p in self.net_.named_parameters():
                 if p.dim() > 1:
                     torch.nn.init.xavier_uniform_(p)
-            
+
             self.params_copied = []
             if self.fine_tune:
                 print("Matching keys for finetuning")
-                labels_to_remove = ['AD', 'LBD', 'VD', 'PRD', 'FTD', 'NPH', 'SEF', 'PSY', 'TBI', 'ODE', 'NC', 'MCI', 'DE']
+                labels_to_remove = ['AD', 'LBD', 'VD', 'PRD', 'FTD', 'NPH', 'SEF', 'PSY', 'TBI', 'ODE', 'NC', 'MCI',
+                                    'DE']
                 if self.stage == 1:
                     adrd_ckpt_path = './nmedckpt/ckpt_swinunetr_stripped_MNI.pt'
                     print(f"Using adrd checkpoint for stage {self.stage}, {adrd_ckpt_path}")
                 elif self.stage == 2:
                     adrd_ckpt_path = self.stage_1_ckpt
-                    
+
                     print(f"Using amyloid and tau checkpoint for stage {self.stage}, {adrd_ckpt_path}")
                 else:
                     raise ValueError(f"Invalid stage {self.stage}")
-                
+
                 adrd_state_dict = torch.load(adrd_ckpt_path, map_location=torch.device(self.device))
                 if 'state_dict' in adrd_state_dict:
                     adrd_state_dict = adrd_state_dict['state_dict']
@@ -1016,7 +1089,7 @@ class ADRDModel(BaseEstimator):
                     train_imgnet = adrd_state_dict.pop('train_imgnet')
                     if 'scaler' in adrd_state_dict and adrd_state_dict['scaler']:
                         adrd_state_dict.pop('scaler')
-                
+
                 new_mdl_state_dict = self.net_.state_dict()
                 for key in adrd_state_dict.keys():
                     if key in labels_to_remove or key == 'emb_aux':
@@ -1030,32 +1103,40 @@ class ADRDModel(BaseEstimator):
                         # print(key)
                         new_mdl_state_dict[key] = adrd_state_dict[key]
                         self.params_copied.append(key)
-                            
+
                 self.net_.load_state_dict(new_mdl_state_dict)
-                
+
                 print("ADRD model weights copied for finetuning")
             else:
                 print("Initializing new weights")
-        
+
         print(self.device)
         self.net_.to(self.device)
 
         # Initialize the number of GPUs
-        if self.data_parallel and torch.cuda.device_count() > 1:
+        # if self.data_parallel and torch.cuda.device_count() > 1:
+        #    print("Available", torch.cuda.device_count(), "GPUs!")
+        #    self.net_ = torch.nn.DataParallel(self.net_, device_ids=self.cuda_devices)
+
+        # Initialize the number of GPUs (DataParallel only works with CUDA)
+        device_str = str(self.device)
+        if self.data_parallel and device_str.startswith('cuda') and torch.cuda.device_count() > 1:
             print("Available", torch.cuda.device_count(), "GPUs!")
             self.net_ = torch.nn.DataParallel(self.net_, device_ids=self.cuda_devices)
-
+        elif self.data_parallel and not device_str.startswith('cuda'):
+            print("警告: DataParallel仅支持CUDA设备，已禁用数据并行")
+            self.data_parallel = False
         # return net
 
-    def _init_dataloader(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None):    
+    def _init_dataloader(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None):
         # initialize dataset and dataloader
         if self.balanced_sampling:
             dat_trn = Transformer2ndOrderBalancedTrainingDataset(
                 x_trn, y_trn,
                 self.src_modalities,
                 self.tgt_modalities,
-                dropout_rate = .5,
-                dropout_strategy = 'permutation',
+                dropout_rate=.5,
+                dropout_strategy='permutation',
                 img_transform=img_train_trans,
             )
         else:
@@ -1063,8 +1144,8 @@ class ADRDModel(BaseEstimator):
                 x_trn, y_trn,
                 self.src_modalities,
                 self.tgt_modalities,
-                dropout_rate = .5,
-                dropout_strategy = 'permutation',
+                dropout_rate=.5,
+                dropout_strategy='permutation',
                 img_transform=img_train_trans,
             )
 
@@ -1076,14 +1157,14 @@ class ADRDModel(BaseEstimator):
         )
 
         ldr_trn = DataLoader(
-            #dataset = dat_trn,
-            #batch_size = self.batch_size,
-            #shuffle = True,
-            #drop_last = False,
-            #num_workers = self._dataloader_num_workers,
-            #collate_fn = TransformerTrainingDataset.collate_fn,
+            # dataset = dat_trn,
+            # batch_size = self.batch_size,
+            # shuffle = True,
+            # drop_last = False,
+            # num_workers = self._dataloader_num_workers,
+            # collate_fn = TransformerTrainingDataset.collate_fn,
             # pin_memory = True
-            dataset= dat_trn,
+            dataset=dat_trn,
             batch_size=self.batch_size,
             shuffle=True,
             drop_last=False,
@@ -1093,14 +1174,14 @@ class ADRDModel(BaseEstimator):
         )
 
         ldr_vld = DataLoader(
-            #dataset = dat_vld,
-            #batch_size = self.batch_size,
-            #shuffle = False,
-            #drop_last = False,
-            #num_workers = self._dataloader_num_workers,
-            #collate_fn = TransformerValidationDataset.collate_fn,
+            # dataset = dat_vld,
+            # batch_size = self.batch_size,
+            # shuffle = False,
+            # drop_last = False,
+            # num_workers = self._dataloader_num_workers,
+            # collate_fn = TransformerValidationDataset.collate_fn,
             # pin_memory = True
-            dataset = dat_vld,
+            dataset=dat_vld,
             batch_size=self.batch_size,
             shuffle=False,
             drop_last=False,
@@ -1110,28 +1191,28 @@ class ADRDModel(BaseEstimator):
         )
 
         return ldr_trn, ldr_vld
-    
+
     def _init_optimizer(self):
         """ ... """
         params = list(self.net_.parameters())
         return torch.optim.AdamW(
             params,
-            lr = self.lr,
-            betas = (0.9, 0.98),
-            weight_decay = self.weight_decay
+            lr=self.lr,
+            betas=(0.9, 0.98),
+            weight_decay=self.weight_decay
         )
-    
+
     def _init_scheduler(self, optimizer):
-        """ ... """    
-        
+        """ ... """
+
         return torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer=optimizer,
             T_max=self.num_epochs,
             eta_min=0,
             verbose=(self.verbose > 2)
         )
-    
-    # def _init_loss_func(self, 
+
+    # def _init_loss_func(self,
     #     num_per_cls: dict[str, tuple[int, int]],
     # ) -> dict[str, Module]:
     #     """ ... """
@@ -1141,6 +1222,6 @@ class ADRDModel(BaseEstimator):
     #         num_per_cls = num_per_cls[k],
     #         reduction = 'none',
     #     ) for k in self.tgt_modalities}
-    
+
     def _proc_fit(self):
         """ ... """

@@ -11,8 +11,8 @@
 
 # define the variables
 prefix="."
-train_path="./data/train.csv"
-vld_path="./data/val.csv"
+train_path="./data/train_data_X.csv"
+vld_path="./data/test_data_X.csv"
 
 
 # Note for setting the flags
@@ -37,13 +37,13 @@ img_net="NonImg"
 img_mode=-1
 
 # Stage 1
-cnf_file="${prefix}/stage_1.toml"
-ckpt_path="./dev/ckpt/model_stage_1.pt"
+cnf_file="${prefix}/stage_2.toml"
+ckpt_path="./dev/ckpt/model_stage_2.pt"
 
 # run train.py 
 python dev/train.py --train_path $train_path --vld_path $vld_path --cnf_file $cnf_file --ckpt_path $ckpt_path --d_model 256 --nhead 1 \
-                    --num_epochs 128 --batch_size 128 --lr 5e-4 --gamma 1 --img_mode $img_mode --img_net $img_net --img_size "(182,218,182)" \
-                    --eval_threshold 0 --fusion_stage middle --imgnet_layers 2 --weight_decay 0.01 --n_splits 1 --stage 1 --save_intermediate_ckpts --early_stop_threshold 128 --transfer_epoch 15 --device "cpu" --fine_tune  #--wandb_project "Project" --wandb
+                    --num_epochs 128 --batch_size 128 --lr 1e-3 --gamma 1 --img_mode $img_mode --img_net $img_net --img_size "(182,218,182)" \
+                    --eval_threshold 0 --fusion_stage middle --imgnet_layers 2 --weight_decay 0.01 --n_splits 1 --stage 1 --save_intermediate_ckpts --early_stop_threshold 1024 --transfer_epoch 15 --device "mps" --fine_tune  #--wandb_project "Project" --wandb
 
 
 # Stage 2
