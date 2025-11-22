@@ -1,0 +1,64 @@
+# AD (Alzheimer's Disease) Model Configuration
+# Auto-generated with one-hot encoded labels
+# All suspicious columns removed to prevent data leakage
+
+[label]
+    [label.Label_0]
+    type = "categorical"
+    num_categories = 2  # Binary: 0 or 1
+
+    [label.Label_1]
+    type = "categorical"
+    num_categories = 2  # Binary: 0 or 1
+
+    [label.Label_2]
+    type = "categorical"
+    num_categories = 2  # Binary: 0 or 1
+
+    [label.Label_3]
+    type = "categorical"
+    num_categories = 2  # Binary: 0 or 1
+
+[data]
+train_csv = "data/train_data_X.csv"
+val_csv = "data/test_data_X.csv"
+# id_column not set - treating each row as independent sample
+
+# ==================== Numerical Features (6) ====================
+[feature.nCount_Exon]
+type = "numerical"
+shape = [ 1,]
+
+[feature.nCount_RNA]
+type = "numerical"
+shape = [ 1,]
+
+[feature.nCount_SCT]
+type = "numerical"
+shape = [ 1,]
+
+[feature.nFeature_Exon]
+type = "numerical"
+shape = [ 1,]
+
+[feature.nFeature_RNA]
+type = "numerical"
+shape = [ 1,]
+
+[feature.nFeature_SCT]
+type = "numerical"
+shape = [ 1,]
+
+# ==================== Categorical Features (Encoded) (3) ====================
+[feature.SORT]  # Encoded: 0-2
+type = "categorical"
+num_categories = 3
+
+[feature.sex]  # Encoded: 0-1
+type = "categorical"
+num_categories = 2
+
+[feature.sex_ontology_term_id]  # Encoded: 0-1
+type = "categorical"
+num_categories = 2
+

@@ -1,0 +1,24 @@
+{
+  "SORT": {
+    "classes": [
+      "AT8",
+      "MAP2",
+      "MAP2control"
+    ],
+    "num_categories": 3
+  },
+  "sex_ontology_term_id": {
+    "classes": [
+      "PATO:0000383",
+      "PATO:0000384"
+    ],
+    "num_categories": 2
+  },
+  "sex": {
+    "classes": [
+      "female",
+      "male"
+    ],
+    "num_categories": 2
+  }
+}

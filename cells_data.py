@@ -210,7 +210,7 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         #'III': 3,
         #'IV': 4,
         #'V': 5,
-        #'VI': 3
+        'VI': 3
     }
 
     df['Label'] = df['Braak'].map(braak_to_numeric)
@@ -282,18 +282,20 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         'Tissue',
 
         # 其他可疑列
-        'SORT',  # 不清楚含义，保险起见删除
-        'assay',  # 如果只有一种，保留无意义
-        'assay_ontology_term_id',
         'is_primary_data',  # 元数据
-        'suspension_type',  # 技术变量
         'development_stage',  # 如果都是同一阶段，无意义
         'development_stage_ontology_term_id',
-        'self_reported_ethnicity',  # 可选，如果认为不重要
-        'self_reported_ethnicity_ontology_term_id',
         'percent_mt',
         'UMAP1',
         'UMAP2',
+        'PMI',
+        'RIN',
+        'Age',
+        'suspension_type',
+        'self_reported_ethnicity',
+        'self_reported_ethnicity_ontology_term_id',
+        'assay',
+        'assay_ontology_term_id',
     ]
 
     existing_columns_to_remove = [col for col in columns_to_remove if col in df.columns]
