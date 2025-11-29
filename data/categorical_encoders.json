@@ -1,16 +1,52 @@
 {
-  "SORT": {
+  "Cell_Types": {
     "classes": [
-      "AT8",
-      "MAP2",
-      "MAP2control"
+      "Ex01_CUX2-LAMP5 (L2-L3)",
+      "Ex02_CUX2-COL5A2 (L2-L4)",
+      "Ex03_RORB-MME (L4-L5)",
+      "Ex04_RORB-GABRG1 (L4-L5)",
+      "Ex05_RORB-ADGRLA (L5)",
+      "Ex06_RORB-PCP4-RPRM (L5)",
+      "Ex07_RORB-PCP4 (L5)",
+      "Ex08_FEZF2-PCP4-ROBO3 (L5)",
+      "Ex09_FEZF2-ADRA1A (L5b)",
+      "Ex10_THEMIS (L5-6)",
+      "Ex11_THEMIS-NTNG2 (L6)",
+      "Ex12_FEZF2-SYT6 (L6)",
+      "Ex13_FEZF2-SEMA3D (L6b)"
     ],
-    "num_categories": 3
+    "num_categories": 13
+  },
+  "assay_ontology_term_id": {
+    "classes": [
+      "EFO:0009899",
+      "EFO:0009922"
+    ],
+    "num_categories": 2
+  },
+  "cell_type_ontology_term_id": {
+    "classes": [
+      "CL:0000540"
+    ],
+    "num_categories": 1
   },
   "sex_ontology_term_id": {
     "classes": [
       "PATO:0000383",
       "PATO:0000384"
+    ],
+    "num_categories": 2
+  },
+  "cell_type": {
+    "classes": [
+      "neuron"
+    ],
+    "num_categories": 1
+  },
+  "assay": {
+    "classes": [
+      "10x 3' v2",
+      "10x 3' v3"
     ],
     "num_categories": 2
   },

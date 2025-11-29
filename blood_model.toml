@@ -1,0 +1,406 @@
+# Blood Expression Data - AD Classification Model Configuration
+# Binary Classification: Label 1 = AD, Label 0 = Non-AD
+
+[label]
+    [label.Label]
+    type = "categorical"
+    num_categories = 2  # Binary: 0 (Non-AD) or 1 (AD)
+
+[data]
+train_csv = "data/train_data_blood.csv"
+val_csv = "data/test_data_blood.csv"
+# Each row is an independent blood sample
+
+# ==================== Numerical Features - Probe Expression (98) ====================
+[feature.ILMN_1343291]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1343295]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651209]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651210]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651221]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651228]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651229]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651235]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651237]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651254]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651259]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651262]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651268]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651278]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651279]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651282]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651285]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651288]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651296]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651315]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651316]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651328]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651330]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651336]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651339]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651341]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651343]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651346]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651347]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651354]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651358]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651364]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651370]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651373]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651378]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651380]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651385]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651395]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651403]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651405]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651415]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651428]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651429]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651433]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651437]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651438]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651453]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651457]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651464]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651486]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651488]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651490]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651492]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651496]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651498]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651499]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651501]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651504]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651506]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651507]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651508]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651513]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651532]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651535]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651538]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651544]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651547]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651554]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651557]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651565]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651567]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651569]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651574]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651599]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651604]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651606]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651609]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651610]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651617]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651624]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651628]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651636]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651637]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651642]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651643]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651652]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651657]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651660]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651664]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651672]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651680]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651681]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651684]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651690]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651692]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651693]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651699]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651705]
+type = "numerical"
+shape = [ 1,]
+

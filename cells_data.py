@@ -255,14 +255,7 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         'disease_ontology_term_id',
 
         # 细胞类型相关（可能泄露病理信息）
-        'Cell_Types',
-        'cell_Types',
-        'cell_types',
-        'Cell_types',
-        'cell_type',
-        'celltype',
-        'CellType',
-        'cell_type_ontology_term_id',
+
 
         # ID列（可能编码患者或批次信息）
         'donor_id',
@@ -283,19 +276,17 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
 
         # 其他可疑列
         'is_primary_data',  # 元数据
-        'development_stage',  # 如果都是同一阶段，无意义
+        'development_stage',
         'development_stage_ontology_term_id',
         'percent_mt',
-        'UMAP1',
-        'UMAP2',
+
         'PMI',
         'RIN',
         'Age',
         'suspension_type',
         'self_reported_ethnicity',
         'self_reported_ethnicity_ontology_term_id',
-        'assay',
-        'assay_ontology_term_id',
+        'SORT'
     ]
 
     existing_columns_to_remove = [col for col in columns_to_remove if col in df.columns]

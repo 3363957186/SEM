@@ -24,7 +24,15 @@ train_csv = "data/train_data_X.csv"
 val_csv = "data/test_data_X.csv"
 # id_column not set - treating each row as independent sample
 
-# ==================== Numerical Features (6) ====================
+# ==================== Numerical Features (8) ====================
+[feature.UMAP1]
+type = "numerical"
+shape = [ 1,]
+
+[feature.UMAP2]
+type = "numerical"
+shape = [ 1,]
+
 [feature.nCount_Exon]
 type = "numerical"
 shape = [ 1,]
@@ -49,10 +57,26 @@ shape = [ 1,]
 type = "numerical"
 shape = [ 1,]
 
-# ==================== Categorical Features (Encoded) (3) ====================
-[feature.SORT]  # Encoded: 0-2
+# ==================== Categorical Features (Encoded) (7) ====================
+[feature.Cell_Types]  # Encoded: 0-12
 type = "categorical"
-num_categories = 3
+num_categories = 13
+
+[feature.assay]  # Encoded: 0-1
+type = "categorical"
+num_categories = 2
+
+[feature.assay_ontology_term_id]  # Encoded: 0-1
+type = "categorical"
+num_categories = 2
+
+[feature.cell_type]  # Encoded: 0-0
+type = "categorical"
+num_categories = 1
+
+[feature.cell_type_ontology_term_id]  # Encoded: 0-0
+type = "categorical"
+num_categories = 1
 
 [feature.sex]  # Encoded: 0-1
 type = "categorical"

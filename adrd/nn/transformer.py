@@ -248,7 +248,7 @@ class PositionalEncoding(torch.nn.Module):
 
     def __init__(self, 
         d_model: int, 
-        max_len: int = 512
+        max_len: int = 3000
     ):
         """ ... """
         super().__init__()

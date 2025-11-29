@@ -6,11 +6,15 @@ import scipy.sparse as sp
 from scipy.io import mmwrite
 import pandas as pd
 
-adata = ad.read_h5ad("/Users/e/Downloads/2.h5ad")          # 常规读取
-# adata = ad.read_h5ad("your_file.h5ad", backed="r")  # 超大文件只读内存映射
+OUT_CSV = "mssm_cells_metadata.csv"
 
-adata
-adata.X.shape                                    # 基本维度
+#adata = ad.read_h5ad("/Users/e/Downloads/1.h5ad")          # 常规读取
+adata = ad.read_h5ad("/Users/e/Downloads/1.h5ad", backed="r")  # 超大文件只读内存映射
+
+n = min(100_000, adata.n_obs)   # 防止总细胞数 < 10w
+print("Subsetting to first", n, "cells out of", adata.n_obs)
+adata = adata[:n, :].to_memory()
+
 adata.obs.head()                                 # 细胞元数据（含 donor / 病理分期 等）
 adata.var.head()                                 # 基因信息
 list(adata.layers) if adata.layers is not None else None
@@ -18,20 +22,6 @@ adata.obsm.keys()                                # UMAP/PC 等嵌入
 
 # 观测列名
 print(adata.obs.columns.tolist())
-
-X = adata.X
-if not sp.issparse(X):
-    X = sp.csr_matrix(X)
-
-mmwrite("X.mtx", X)  # 稀疏矩阵
-pd.Series(adata.var_names).to_csv("genes.tsv", sep="\t", index=False, header=False)
-pd.Series(adata.obs_names).to_csv("barcodes.tsv", sep="\t", index=False, header=False)
-print("Wrote X.mtx, genes.tsv, barcodes.tsv")
-
-
-
-OUT_CSV = "cells_metadata.csv"      # 想压缩就用 .csv.gz
-
 
 # 1) 取 obs（所有你看到的列）并把 cell_id 放到第一列
 obs = adata.obs.copy()
@@ -63,7 +53,7 @@ print("Wrote", OUT_CSV, "with shape:", obs.shape)
 
 # 在写 CSV 前后加：
 
-out = os.path.abspath("cells_metadata.csv")  # 你的输出文件名
+out = os.path.abspath(OUT_CSV)  # 你的输出文件名
 print(">>> Will write to:", out)
 
 obs.to_csv(out, index=False, encoding="utf-8-sig", quoting=csv.QUOTE_MINIMAL, lineterminator="\n")

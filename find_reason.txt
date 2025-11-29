@@ -1,0 +1,119 @@
+将dropout_rate 全部设置为0
+Epoch 127 (TRN): 100%|| 573/573 [00:00<00:00, 873.92it/s]
+Accuracy:           0.6003
+Balanced Accuracy:  0.5276
+Precision:          0.4937
+Sensitivity/Recall: 0.1711
+Specificity:        0.8841
+F1 score:           0.2541
+MCC:                0.0782
+AUC (ROC):          0.5483
+AUC (PR):           0.4516
+NPV:                0.6174
+Loss:               0.3374
+Epoch 127 (VLD): 100%|| 144/144 [00:00<00:00, 1151.73it/s]
+Accuracy:           0.6042
+Balanced Accuracy:  0.5000
+Precision:          ------
+Sensitivity/Recall: 0.0000
+Specificity:        1.0000
+F1 score:           ------
+MCC:                ------
+AUC (ROC):          0.5529
+AUC (PR):           0.4263
+NPV:                0.6042
+Loss:               0.4455
+model_stage_2.pt
+False False
+Best AUC (PR): 0.47944461932537213
+Best AUC (ROC): 0.5934664246823955
+126
+
+Epoch 127 (TRN): 100%|| 573/573 [00:00<00:00, 863.55it/s]
+Accuracy:           0.5410
+Balanced Accuracy:  0.4746
+Precision:          0.3301
+Sensitivity/Recall: 0.1491
+Specificity:        0.8000
+F1 score:           0.2054
+MCC:                -0.0649
+AUC (ROC):          0.4766
+AUC (PR):           0.3702
+NPV:                0.5872
+Loss:               0.3550
+Epoch 127 (VLD): 100%|| 144/144 [00:00<00:00, 1087.24it/s]
+Accuracy:           0.6042
+Balanced Accuracy:  0.5000
+Precision:          ------
+Sensitivity/Recall: 0.0000
+Specificity:        1.0000
+F1 score:           ------
+MCC:                ------
+AUC (ROC):          0.5566
+AUC (PR):           0.4214
+NPV:                0.6042
+Loss:               0.4268
+
+================================================================================
+🔍 Logits分布分析 (Epoch 127)
+================================================================================
+
+Label:
+  样本数: 144
+  正类样本: 57.0 (39.6%)
+
+  Logits统计:
+    Min:    -1.0358
+    Q1:     -1.0317
+    Median: -0.9588
+    Q3:     -0.9559
+    Max:    -0.9533
+    Mean:   -0.9923
+    Std:    0.0378
+
+  概率统计 (sigmoid后):
+    Min:    0.2620
+    Median: 0.2771
+    Max:    0.2782
+    Mean:   0.2705
+
+  关键指标:
+    Logits > 0的样本: 0/144 (0.0%)
+    Probs > 0.5的样本: 0/144 (0.0%)
+
+  正类样本 (label=1):
+    Logits: mean=-0.9854, std=0.0365
+    Logits: min=-1.0349, max=-0.9535
+    Probs:  mean=0.2719
+    Logits>0: 0/57 (0.0%)
+
+  负类样本 (label=0):
+    Logits: mean=-0.9968, std=0.0379
+    Logits: min=-1.0358, max=-0.9533
+    Probs:  mean=0.2696
+
+  正负类差异:
+    Logits差: 0.0114
+    Probs差:  0.0023
+
+  不同阈值下的Recall:
+    Logit >  -2.0: Recall=1.000, Precision=0.396, Pred_Pos=144
+    Logit >  -1.0: Recall=0.614, Precision=0.467, Pred_Pos=75
+    Logit >  -0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+
+  使用概率阈值:
+    Prob > 0.3: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.4: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.6: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.7: Recall=0.000, Precision=0.000, Pred_Pos=0
+================================================================================
+
+model_stage_2.pt
+False False
+Best AUC (PR): 0.4944398136616412
+Best AUC (ROC): 0.611413591449889
+120

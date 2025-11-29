@@ -193,8 +193,8 @@ dat_trn = CSVDataset(dat_file=args.train_path, cnf_file=args.cnf_file, img_mode=
 print("Done.\nLoading Validation dataset ...")
 dat_vld = CSVDataset(dat_file=args.vld_path, cnf_file=args.cnf_file, img_mode=args.img_mode, transforms=FilterImages('vld'), stripped=stripped)
 
-
 label_fractions = dat_trn.label_fractions
+
 # print(label_fractions)
 
 label_distribution = {}

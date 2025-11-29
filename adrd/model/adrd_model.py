@@ -373,7 +373,7 @@ class ADRDModel(BaseEstimator):
                 if self.label_fractions[k][1] >= 0.3:
                     alpha = -1
                 else:
-                    alpha = pow((1 - self.label_fractions[k][1]), 2)
+                    alpha = pow((1 - self.label_fractions[k][1]), 1.5)
             # alpha = -1
             self.loss_fn[k] = nn.SigmoidFocalLoss(
                 alpha=alpha,
@@ -763,6 +763,8 @@ class ADRDModel(BaseEstimator):
 
         if self.verbose > 2:
             print_metrics_multitask(met_vld)
+
+        analyze_logits_distribution(scores_vld, y_true_vld, y_prob_vld, epoch)
 
         return met_vld
 
@@ -1225,3 +1227,90 @@ class ADRDModel(BaseEstimator):
 
     def _proc_fit(self):
         """ ... """
+
+from scipy.special import expit as sigmoid
+import numpy as np
+
+def analyze_logits_distribution(scores_vld, y_true_vld, y_prob_vld, epoch):
+    """
+    详细分析logits和概率分布
+    """
+    print("\n" + "=" * 80)
+    print(f"🔍 Logits分布分析 (Epoch {epoch})")
+    print("=" * 80)
+
+    for key in scores_vld.keys():
+        logits = scores_vld[key].numpy()
+        probs = y_prob_vld[key].numpy()
+        labels = y_true_vld[key].numpy()
+
+        # 整体统计
+        print(f"\n{key}:")
+        print(f"  样本数: {len(logits)}")
+        print(f"  正类样本: {labels.sum()} ({labels.sum() / len(labels) * 100:.1f}%)")
+
+        # Logits分布
+        print(f"\n  Logits统计:")
+        print(f"    Min:    {logits.min():.4f}")
+        print(f"    Q1:     {np.percentile(logits, 25):.4f}")
+        print(f"    Median: {np.percentile(logits, 50):.4f}")
+        print(f"    Q3:     {np.percentile(logits, 75):.4f}")
+        print(f"    Max:    {logits.max():.4f}")
+        print(f"    Mean:   {logits.mean():.4f}")
+        print(f"    Std:    {logits.std():.4f}")
+
+        # 概率分布
+        print(f"\n  概率统计 (sigmoid后):")
+        print(f"    Min:    {probs.min():.4f}")
+        print(f"    Median: {np.percentile(probs, 50):.4f}")
+        print(f"    Max:    {probs.max():.4f}")
+        print(f"    Mean:   {probs.mean():.4f}")
+
+        # 关键诊断
+        print(f"\n  关键指标:")
+        print(
+            f"    Logits > 0的样本: {(logits > 0).sum()}/{len(logits)} ({(logits > 0).sum() / len(logits) * 100:.1f}%)")
+        print(
+            f"    Probs > 0.5的样本: {(probs > 0.5).sum()}/{len(logits)} ({(probs > 0.5).sum() / len(logits) * 100:.1f}%)")
+
+        # 分析正负类的logits
+        if labels.sum() > 0:
+            pos_logits = logits[labels == 1]
+            neg_logits = logits[labels == 0]
+
+            print(f"\n  正类样本 (label=1):")
+            print(f"    Logits: mean={pos_logits.mean():.4f}, std={pos_logits.std():.4f}")
+            print(f"    Logits: min={pos_logits.min():.4f}, max={pos_logits.max():.4f}")
+            print(f"    Probs:  mean={sigmoid(pos_logits).mean():.4f}")
+            print(
+                f"    Logits>0: {(pos_logits > 0).sum()}/{len(pos_logits)} ({(pos_logits > 0).sum() / len(pos_logits) * 100:.1f}%)")
+
+            print(f"\n  负类样本 (label=0):")
+            print(f"    Logits: mean={neg_logits.mean():.4f}, std={neg_logits.std():.4f}")
+            print(f"    Logits: min={neg_logits.min():.4f}, max={neg_logits.max():.4f}")
+            print(f"    Probs:  mean={sigmoid(neg_logits).mean():.4f}")
+
+            print(f"\n  正负类差异:")
+            print(f"    Logits差: {pos_logits.mean() - neg_logits.mean():.4f}")
+            print(f"    Probs差:  {sigmoid(pos_logits).mean() - sigmoid(neg_logits).mean():.4f}")
+
+        # 不同阈值的Recall
+        print(f"\n  不同阈值下的Recall:")
+        for thresh_logit in [-2, -1, -0.5, 0, 0.5, 1]:
+            preds = (logits > thresh_logit).astype(int)
+            if labels.sum() > 0:
+                recall = (preds[labels == 1]).sum() / labels.sum()
+                precision = (labels[preds == 1]).sum() / preds.sum() if preds.sum() > 0 else 0
+                print(
+                    f"    Logit > {thresh_logit:5.1f}: Recall={recall:.3f}, Precision={precision:.3f}, Pred_Pos={preds.sum()}")
+
+        print(f"\n  使用概率阈值:")
+        for thresh_prob in [0.3, 0.4, 0.5, 0.6, 0.7]:
+            preds = (probs > thresh_prob).astype(int)
+            if labels.sum() > 0:
+                recall = (preds[labels == 1]).sum() / labels.sum()
+                precision = (labels[preds == 1]).sum() / preds.sum() if preds.sum() > 0 else 0
+                print(
+                    f"    Prob > {thresh_prob:.1f}: Recall={recall:.3f}, Precision={precision:.3f}, Pred_Pos={preds.sum()}")
+
+    print("=" * 80 + "\n")
