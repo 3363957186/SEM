@@ -33,6 +33,9 @@ from ..utils.misc import get_metrics_multitask, print_metrics_multitask
 from ..utils.misc import convert_args_kwargs_to_kwargs
 
 
+prob_threshold = 0.4
+logit_threshold = np.log(prob_threshold / (1 - prob_threshold))
+
 def _manage_ctx_fit(func):
     ''' ... '''
 
@@ -644,7 +647,8 @@ class ADRDModel(BaseEstimator):
             scores_trn[key] = torch.cat(scores_trn[key])
             y_true_trn[key] = torch.cat(y_true_trn[key])
             y_mask_trn[key] = torch.cat(y_mask_trn[key])
-            y_pred_trn[key] = (scores_trn[key] > 0).to(torch.int)
+            #y_pred_trn[key] = (scores_trn[key] > 0).to(torch.int)
+            y_pred_trn[key] = (scores_trn[key] > logit_threshold).to(torch.int)
             y_prob_trn[key] = torch.sigmoid(scores_trn[key])
 
         # print(y_mask_trn)
@@ -739,7 +743,8 @@ class ADRDModel(BaseEstimator):
             scores_vld[key] = torch.cat(scores_vld[key])
             y_true_vld[key] = torch.cat(y_true_vld[key])
             y_mask_vld[key] = torch.cat(y_mask_vld[key])
-            y_pred_vld[key] = (scores_vld[key] > 0).to(torch.int)
+            #y_pred_vld[key] = (scores_vld[key] > 0).to(torch.int)
+            y_pred_vld[key] = (scores_vld[key] > logit_threshold).to(torch.int)
             y_prob_vld[key] = torch.sigmoid(scores_vld[key])
 
         # print(y_mask_trn)

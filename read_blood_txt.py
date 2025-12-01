@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 想保留的前多少列
-N_COLS = 100
+N_COLS = 300
 
 # 先写一个小函数：读一个 txt → 去掉 ! 行 → 设 index → 转置
 def load_and_transpose(txt_path):

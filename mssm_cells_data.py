@@ -259,8 +259,6 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         'disease_ontology_term_id',
         'disease',
         'class',
-        'subclass',
-        'subtype',
 
         # 细胞类型相关（可能泄露病理信息）
         'genetic_ancestry',
@@ -287,6 +285,8 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         'self_reported_ethnicity',
         'development_stage',
         'observation_joinid',
+        'UMAP1',
+        'UMAP2',
     ]
 
     existing_columns_to_remove = [col for col in columns_to_remove if col in df.columns]

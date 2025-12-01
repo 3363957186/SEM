@@ -11,7 +11,7 @@ train_csv = "data/train_data_blood.csv"
 val_csv = "data/test_data_blood.csv"
 # Each row is an independent blood sample
 
-# ==================== Numerical Features - Probe Expression (98) ====================
+# ==================== Numerical Features - Probe Expression (298) ====================
 [feature.ILMN_1343291]
 type = "numerical"
 shape = [ 1,]
@@ -401,6 +401,806 @@ type = "numerical"
 shape = [ 1,]
 
 [feature.ILMN_1651705]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651708]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651712]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651715]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651719]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651735]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651737]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651741]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651745]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651752]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651758]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651760]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651767]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651769]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651776]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651788]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651789]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651792]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651799]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651800]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651806]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651811]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651817]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651819]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651826]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651828]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651832]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651850]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651872]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651886]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651899]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651900]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651902]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651903]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651916]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651936]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651938]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651943]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651944]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651949]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651950]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651958]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651964]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651966]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651967]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651980]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651984]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1651987]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652000]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652003]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652006]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652008]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652015]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652023]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652024]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652065]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652072]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652073]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652081]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652082]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652085]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652113]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652123]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652128]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652144]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652147]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652151]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652160]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652161]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652163]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652164]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652185]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652188]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652196]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652198]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652199]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652205]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652207]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652209]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652215]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652218]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652219]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652223]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652230]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652236]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652237]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652242]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652249]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652254]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652276]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652277]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652280]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652287]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652297]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652300]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652306]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652309]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652313]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652314]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652319]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652331]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652333]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652342]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652348]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652357]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652366]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652368]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652369]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652371]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652378]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652379]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652381]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652394]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652407]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652409]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652412]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652417]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652429]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652431]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652434]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652445]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652450]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652456]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652459]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652464]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652469]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652472]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652486]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652487]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652490]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652494]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652505]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652512]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652521]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652525]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652533]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652540]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652550]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652577]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652580]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652594]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652602]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652604]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652631]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652638]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652639]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652647]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652650]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652660]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652662]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652666]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652677]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652680]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652689]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652700]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652701]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652711]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652716]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652719]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652721]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652722]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652729]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652735]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652736]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652737]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652747]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652749]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652753]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652754]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652758]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652762]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652763]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652768]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652777]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652787]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652790]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652797]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652806]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652807]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652808]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652819]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652825]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652826]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652846]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652865]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652872]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652881]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652888]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652906]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652907]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652913]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652918]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652927]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652928]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652929]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652931]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652939]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652940]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652955]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652959]
+type = "numerical"
+shape = [ 1,]
+
+[feature.ILMN_1652969]
 type = "numerical"
 shape = [ 1,]
 

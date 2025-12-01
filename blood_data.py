@@ -150,6 +150,11 @@ def save_encoders(encoders, filepath):
     print(f"✓ 编码器信息已保存: {filepath}")
 
 
+def create_label_strategy_2(status):
+    status = str(status).upper()
+    return 1 if ('AD' in status or 'MCI' in status) else 0
+
+
 def process_blood_data_with_split(input_file, test_size=0.2, random_state=42):
     """
     处理血液表达数据，创建Label列并分割为训练集和测试集
@@ -207,8 +212,7 @@ def process_blood_data_with_split(input_file, test_size=0.2, random_state=42):
         print(f"可用列名: {df.columns.tolist()}")
         return None
 
-    # 创建Label: Status包含"AD"为1，否则为0
-    df['Label'] = df['Status'].str.contains('AD', case=False, na=False).astype(int)
+    df['Label'] = df['Status'].apply(create_label_strategy_2)
 
     print(f"Status唯一值示例: {sorted(df['Status'].unique())[:10]}")
     print(f"\nLabel分布:")
