@@ -33,7 +33,7 @@ from ..utils.misc import get_metrics_multitask, print_metrics_multitask
 from ..utils.misc import convert_args_kwargs_to_kwargs
 
 
-prob_threshold = 0.4
+prob_threshold = 0.5
 logit_threshold = np.log(prob_threshold / (1 - prob_threshold))
 
 def _manage_ctx_fit(func):
@@ -88,6 +88,9 @@ def get_device(device_name: str) -> torch.device:
             return torch.device('cpu')
     else:
         return torch.device('cpu')
+
+
+
 
 
 class ADRDModel(BaseEstimator):
@@ -148,6 +151,9 @@ class ADRDModel(BaseEstimator):
                  transfer_epoch: int = 15,
                  stage_1_ckpt: str = "./dev/ckpt/model_stage_1.ckpt",
                  eval_threshold: float = 0.5,
+                 freeze_backbone: bool = False,
+                 use_f1_loss = True,
+                 f1_loss_weight = 0.3
 
                  ) -> None:
         """Create a new ADRD model.
@@ -291,6 +297,7 @@ class ADRDModel(BaseEstimator):
         self.transfer_epoch = transfer_epoch
         self.stage_1_ckpt = stage_1_ckpt
         self.eval_threshold = eval_threshold
+        self.freeze_backbone_flag = freeze_backbone
 
     @_manage_ctx_fit
     def fit(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None, img_mode=0) -> Self:
@@ -1134,6 +1141,8 @@ class ADRDModel(BaseEstimator):
             print("警告: DataParallel仅支持CUDA设备，已禁用数据并行")
             self.data_parallel = False
         # return net
+        if hasattr(self, 'freeze_backbone_flag') and self.freeze_backbone_flag:
+            self.freeze_backbone()
 
     def _init_dataloader(self, x_trn, x_vld, y_trn, y_vld, img_train_trans=None, img_vld_trans=None):
         # initialize dataset and dataloader
@@ -1232,6 +1241,43 @@ class ADRDModel(BaseEstimator):
 
     def _proc_fit(self):
         """ ... """
+
+    def freeze_backbone(self):
+        """冻结Backbone，只训练分类头"""
+
+        print("\n" + "=" * 70)
+        print("🔒 冻结Backbone")
+        print("=" * 70)
+
+        if not hasattr(self, 'net_'):
+            return self
+
+        # 关键：通过self.net_访问子模块
+        for name, module in self.net_.named_children():
+            is_output = any(keyword in name.lower()
+                            for keyword in ['output', 'cls', 'head', 'fc','modules_emb_src'])
+
+            if is_output:
+                # 保持可训练
+                for param in module.parameters():
+                    param.requires_grad = True
+                print(f"✓ {name} 可训练")
+            else:
+                # 冻结
+                for param in module.parameters():
+                    param.requires_grad = False
+                print(f"❄️  {name} 已冻结")
+
+        # 统计
+        total = sum(p.numel() for p in self.net_.parameters())
+        trainable = sum(p.numel() for p in self.net_.parameters()
+                        if p.requires_grad)
+
+        print(f"\n总参数: {total:,}")
+        print(f"可训练: {trainable:,} ({trainable / total * 100:.1f}%)")
+        print("=" * 70 + "\n")
+
+        return self
 
 from scipy.special import expit as sigmoid
 import numpy as np

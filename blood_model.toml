@@ -1,10 +1,15 @@
 # Blood Expression Data - AD Classification Model Configuration
-# Binary Classification: Label 1 = AD, Label 0 = Non-AD
+# Auto-generated with one-hot encoded labels
+# Label: 1 = AD (Alzheimer's Disease), 0 = Non-AD
 
 [label]
-    [label.Label]
+    [label.Label_0]
     type = "categorical"
-    num_categories = 2  # Binary: 0 (Non-AD) or 1 (AD)
+    num_categories = 2  # Binary: 0 or 1
+
+    [label.Label_1]
+    type = "categorical"
+    num_categories = 2  # Binary: 0 or 1
 
 [data]
 train_csv = "data/train_data_blood.csv"

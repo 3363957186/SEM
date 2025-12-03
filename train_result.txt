@@ -599,5 +599,357 @@ Best AUC (ROC): 0.9386672377591041
 'celltype',
 'CellType',
 'cell_type_ontology_term_id',
-'UMAP1',
-'UMAP2',
+'Tissue',
+eval_threshold=0.2
+Epoch 031 (TRN): 100%|| 76903/76903 [00:13<00:00, 5883.88it/s]
+Accuracy:           0.1949    0.7127    0.2832    0.6519
+Balanced Accuracy:  0.5409    0.8374    0.5275    0.6368
+Precision:          0.1310    0.2886    0.2516    0.5993
+Sensitivity/Recall: 0.9980    1.0000    0.9992    1.0000
+Specificity:        0.0838    0.6748    0.0557    0.2736
+F1 score:           0.2316    0.4479    0.4020    0.7495
+MCC:                0.1022    0.4413    0.1166    0.4050
+AUC (ROC):          0.7437    0.9333    0.7270    0.7839
+AUC (PR):           0.2417    0.5800    0.5122    0.7814
+NPV:                0.9967    1.0000    0.9957    1.0000
+Loss:               0.0364    0.0187    0.0595    0.1328
+Epoch 031 (VLD): 100%|| 19226/19226 [00:01<00:00, 13056.63it/s]
+Accuracy:           0.5391    0.9425    0.4425    0.7539
+Balanced Accuracy:  0.7327    0.9674    0.6327    0.7433
+Precision:          0.2073    0.6696    0.3019    0.6791
+Sensitivity/Recall: 0.9884    1.0000    1.0000    1.0000
+Specificity:        0.4769    0.9349    0.2654    0.4865
+F1 score:           0.3427    0.8021    0.4638    0.8089
+MCC:                0.3080    0.7912    0.2831    0.5748
+AUC (ROC):          0.8560    0.9728    0.9242    0.9014
+AUC (PR):           0.3843    0.7316    0.8246    0.9038
+NPV:                0.9967    1.0000    1.0000    1.0000
+Loss:               0.0309    0.0094    0.0395    0.1022
+model_stage_2.pt
+Saving the model to ./dev/ckpt/model_stage_2_AUPR_0.pt...
+True False
+Best AUC (PR): 0.7110928303426127
+Best AUC (ROC): 0.915320598054191
+
+14
+本次额外删除
+'RIN',
+本次额外添加
+'assay',
+'assay_ontology_term_id',
+'Cell_Types',
+'cell_Types',
+'cell_types',
+'Cell_types',
+'cell_type',
+'celltype',
+'CellType',
+'cell_type_ontology_term_id',
+'Tissue',
+eval_threshold=0.6
+
+Epoch 127 (TRN): 100%|| 76903/76903 [00:13<00:00, 5818.31it/s]
+Accuracy:           0.8728    0.9048    0.8014    0.6430
+Balanced Accuracy:  0.5565    0.8030    0.6024    0.6546
+Precision:          0.4281    0.5790    0.8391    0.8607
+Sensitivity/Recall: 0.1385    0.6702    0.2180    0.3752
+Specificity:        0.9744    0.9357    0.9867    0.9340
+F1 score:           0.2093    0.6213    0.3461    0.5226
+MCC:                0.1898    0.5692    0.3614    0.3688
+AUC (ROC):          0.7808    0.9372    0.7710    0.8239
+AUC (PR):           0.3144    0.5939    0.5841    0.8228
+NPV:                0.8910    0.9556    0.7988    0.5791
+Loss:               0.0347    0.0183    0.0559    0.1242
+Epoch 127 (VLD): 100%|| 19226/19226 [00:01<00:00, 11347.14it/s]
+Accuracy:           0.8790    0.9427    0.9093    0.6896
+Balanced Accuracy:  0.6852    0.9608    0.8687    0.7017
+Precision:          0.5025    0.6742    0.8263    0.9851
+Sensitivity/Recall: 0.4292    0.9844    0.7901    0.4102
+Specificity:        0.9412    0.9372    0.9472    0.9933
+F1 score:           0.4630    0.8003    0.8078    0.5792
+MCC:                0.3968    0.7870    0.7488    0.4891
+AUC (ROC):          0.8973    0.9774    0.9638    0.9557
+AUC (PR):           0.5321    0.7644    0.9010    0.9576
+NPV:                0.9226    0.9978    0.9342    0.6078
+Loss:               0.0256    0.0090    0.0291    0.0944
+model_stage_2.pt
+False False
+Best AUC (PR): 0.8111322827622612
+Best AUC (ROC): 0.9555172537119562
+29
+
+15
+本次额外删除
+'RIN',
+本次额外添加
+'assay',
+'assay_ontology_term_id',
+'Cell_Types',
+'cell_Types',
+'cell_types',
+'Cell_types',
+'cell_type',
+'celltype',
+'CellType',
+'cell_type_ontology_term_id',
+'Tissue',
+eval_threshold=0.5
+
+Epoch 127 (TRN): 100%|| 76903/76903 [00:13<00:00, 5856.71it/s]
+Accuracy:           0.7246    0.8556    0.7586    0.7487
+Balanced Accuracy:  0.6664    0.8513    0.6052    0.7448
+Precision:          0.2411    0.4381    0.4991    0.7233
+Sensitivity/Recall: 0.5895    0.8458    0.3089    0.8379
+Specificity:        0.7433    0.8569    0.9015    0.6518
+F1 score:           0.3423    0.5772    0.3817    0.7764
+MCC:                0.2379    0.5399    0.2526    0.5000
+AUC (ROC):          0.7583    0.9188    0.7045    0.8315
+AUC (PR):           0.2852    0.4727    0.4654    0.8250
+NPV:                0.9290    0.9768    0.8041    0.7872
+Loss:               0.0356    0.0199    0.0621    0.1205
+Epoch 127 (VLD): 100%|| 19226/19226 [00:01<00:00, 11917.66it/s]
+Accuracy:           0.8401    0.8789    0.8202    0.8255
+Balanced Accuracy:  0.6749    0.9314    0.7471    0.8303
+Precision:          0.3716    0.4904    0.6330    0.9347
+Sensitivity/Recall: 0.4566    1.0000    0.6057    0.7149
+Specificity:        0.8932    0.8629    0.8884    0.9457
+F1 score:           0.4098    0.6581    0.6190    0.8102
+MCC:                0.3207    0.6505    0.5017    0.6742
+AUC (ROC):          0.8344    0.9602    0.8515    0.9522
+AUC (PR):           0.4655    0.6037    0.6987    0.9524
+NPV:                0.9223    1.0000    0.8764    0.7533
+Loss:               0.0280    0.0143    0.0454    0.0872
+model_stage_2.pt
+False False
+Best AUC (PR): 0.7126693726454957
+Best AUC (ROC): 0.9102176192629559
+81
+
+16
+本次额外删除
+'RIN',
+本次额外添加
+'assay',
+'assay_ontology_term_id',
+'Cell_Types',
+'cell_Types',
+'cell_types',
+'Cell_types',
+'cell_type',
+'celltype',
+'CellType',
+'cell_type_ontology_term_id',
+'Tissue',
+eval_threshold=0.7
+Epoch 127 (TRN): 100%|| 76903/76903 [00:12<00:00, 6003.76it/s]
+Accuracy:           0.8795    0.8835    0.7649    0.5473
+Balanced Accuracy:  0.5066    0.5038    0.5137    0.5650
+Precision:          0.7263    0.5200    0.8921    0.9467
+Sensitivity/Recall: 0.0139    0.0087    0.0285    0.1384
+Specificity:        0.9993    0.9989    0.9989    0.9915
+F1 score:           0.0273    0.0171    0.0553    0.2415
+MCC:                0.0894    0.0556    0.1341    0.2448
+AUC (ROC):          0.7615    0.9184    0.6978    0.8288
+AUC (PR):           0.2996    0.4776    0.4551    0.8231
+NPV:                0.8798    0.8842    0.7639    0.5144
+Loss:               0.0354    0.0200    0.0625    0.1211
+Epoch 127 (VLD): 100%|| 19226/19226 [00:01<00:00, 12067.69it/s]
+Accuracy:           0.8924    0.8834    0.8147    0.6528
+Balanced Accuracy:  0.5726    0.5000    0.6240    0.6664
+Precision:          0.8088    ------    0.9144    0.9815
+Sensitivity/Recall: 0.1502    0.0000    0.2556    0.3397
+Specificity:        0.9951    1.0000    0.9924    0.9931
+F1 score:           0.2533    ------    0.3995    0.5047
+MCC:                0.3196    ------    0.4231    0.4325
+AUC (ROC):          0.8683    0.9626    0.8619    0.9577
+AUC (PR):           0.5194    0.6164    0.7064    0.9561
+NPV:                0.8943    0.8834    0.8075    0.5805
+Loss:               0.0268    0.0142    0.0452    0.0760
+model_stage_2.pt
+False False
+Best AUC (PR): 0.7252899933956498
+Best AUC (ROC): 0.9148475653869113
+39
+
+17
+本次额外删除
+'RIN',
+本次额外添加
+'assay',
+'assay_ontology_term_id',
+'Cell_Types',
+'cell_Types',
+'cell_types',
+'Cell_types',
+'cell_type',
+'celltype',
+'CellType',
+'cell_type_ontology_term_id',
+'Tissue',
+
+❄️  modules_emb_src 已冻结
+❄️  pe 已冻结
+❄️  transformer 已冻结
+✓ modules_cls 可训练
+Epoch 127 (TRN): 100%|| 76903/76903 [00:12<00:00, 6376.25it/s]
+Accuracy:           0.8292    0.7924    0.7584    0.5953
+Balanced Accuracy:  0.5379    0.6398    0.5000    0.5917
+Precision:          0.2152    0.2651    0.2258    0.5985
+Sensitivity/Recall: 0.1531    0.4409    0.0008    0.6769
+Specificity:        0.9228    0.8387    0.9992    0.5066
+F1 score:           0.1789    0.3311    0.0015    0.6353
+MCC:                0.0882    0.2270    -0.0010    0.1863
+AUC (ROC):          0.6011    0.7414    0.5124    0.6436
+AUC (PR):           0.1683    0.2911    0.2483    0.6413
+NPV:                0.8873    0.9192    0.7589    0.5907
+Loss:               0.0419    0.0352    0.0696    0.1619
+Epoch 127 (VLD): 100%|| 19226/19226 [00:01<00:00, 9947.37it/s]
+Accuracy:           0.8784    0.8855    0.7589    0.6551
+Balanced Accuracy:  0.5000    0.7363    0.5000    0.6594
+Precision:          ------    0.5082    ------    0.7187
+Sensitivity/Recall: 0.0000    0.5417    0.0000    0.5546
+Specificity:        1.0000    0.9308    1.0000    0.7642
+F1 score:           ------    0.5244    ------    0.6261
+MCC:                ------    0.4597    ------    0.3248
+AUC (ROC):          0.7741    0.9388    0.5656    0.8288
+AUC (PR):           0.2374    0.5572    0.2704    0.8127
+NPV:                0.8784    0.9390    0.7589    0.6123
+Loss:               0.0408    0.0247    0.0710    0.1443
+
+model_stage_2.pt
+False False
+Best AUC (PR): 0.48393079082924173
+Best AUC (ROC): 0.799019728155292
+90
+
+✓ modules_emb_src 可训练
+❄️  pe 已冻结
+❄️  transformer 已冻结
+✓ modules_cls 可训练
+
+总参数: 105,488
+可训练: 5,904 (5.6%)
+Epoch 127 (TRN): 100%|| 76903/76903 [00:12<00:00, 6212.75it/s]
+Accuracy:           0.7753    0.8781    0.7238    0.7060
+Balanced Accuracy:  0.6153    0.8580    0.5641    0.6996
+Precision:          0.2439    0.4865    0.3892    0.6707
+Sensitivity/Recall: 0.4039    0.8319    0.2557    0.8558
+Specificity:        0.8267    0.8842    0.8725    0.5434
+F1 score:           0.3041    0.6139    0.3086    0.7520
+MCC:                0.1879    0.5752    0.1502    0.4223
+AUC (ROC):          0.7224    0.9354    0.6215    0.7641
+AUC (PR):           0.2282    0.5716    0.3774    0.7359
+NPV:                0.9093    0.9755    0.7867    0.7761
+Loss:               0.0385    0.0193    0.0671    0.1342
+Epoch 127 (VLD): 100%|| 19226/19226 [00:01<00:00, 12787.43it/s]
+Accuracy:           0.8631    0.9445    0.8252    0.7788
+Balanced Accuracy:  0.5591    0.9686    0.6377    0.7707
+Precision:          0.3569    0.6772    0.9992    0.7120
+Sensitivity/Recall: 0.1575    1.0000    0.2755    0.9658
+Specificity:        0.9607    0.9371    0.9999    0.5755
+F1 score:           0.2185    0.8076    0.4319    0.8197
+MCC:                0.1715    0.7967    0.4729    0.5939
+AUC (ROC):          0.8127    0.9703    0.8663    0.8463
+AUC (PR):           0.3052    0.7105    0.7274    0.8389
+NPV:                0.8918    1.0000    0.8128    0.9394
+Loss:               0.0357    0.0093    0.0562    0.1129
+model_stage_2.pt
+False False
+Best AUC (PR): 0.6462932199838076
+Best AUC (ROC): 0.8743024226978103
+26
+
+17
+本次额外删除
+'RIN',
+本次额外添加
+'assay',
+'assay_ontology_term_id',
+'Cell_Types',
+'cell_Types',
+'cell_types',
+'Cell_types',
+'cell_type',
+'celltype',
+'CellType',
+'cell_type_ontology_term_id',
+'Tissue',
+'nCount_SCT',
+'nCount_RNA',
+Epoch 035 (TRN): 100%|| 76903/76903 [00:12<00:00, 6347.26it/s]
+Accuracy:           0.7462    0.8589    0.7539    0.6886
+Balanced Accuracy:  0.6165    0.8313    0.6072    0.6829
+Precision:          0.2250    0.4415    0.4847    0.6622
+Sensitivity/Recall: 0.4452    0.7953    0.3238    0.8205
+Specificity:        0.7878    0.8673    0.8906    0.5453
+F1 score:           0.2990    0.5678    0.3882    0.7329
+MCC:                0.1782    0.5220    0.2495    0.3819
+AUC (ROC):          0.7171    0.9250    0.6948    0.7532
+AUC (PR):           0.2301    0.5707    0.4804    0.7353
+NPV:                0.9112    0.9698    0.8056    0.7365
+Loss:               0.0375    0.0201    0.0611    0.1382
+Epoch 035 (VLD): 100%|| 19226/19226 [00:01<00:00, 11288.95it/s]
+Accuracy:           0.7901    0.9440    0.8595    0.7909
+Balanced Accuracy:  0.7168    0.9666    0.7867    0.7833
+Precision:          0.3152    0.6766    0.7384    0.7239
+Sensitivity/Recall: 0.6200    0.9960    0.6460    0.9673
+Specificity:        0.8136    0.9372    0.9273    0.5992
+F1 score:           0.4179    0.8058    0.6891    0.8281
+MCC:                0.3322    0.7942    0.6011    0.6152
+AUC (ROC):          0.8405    0.9778    0.9135    0.8734
+AUC (PR):           0.3453    0.7848    0.8006    0.8594
+NPV:                0.9393    0.9994    0.8918    0.9441
+Loss:               0.0305    0.0087    0.0405    0.1081
+model_stage_2.pt
+Saving the model to ./dev/ckpt/model_stage_2_AUPR_0.pt...
+Saving the model to ./dev/ckpt/model_stage_2_AUROC_0.pt...
+True True
+Best AUC (PR): 0.6975286192572303
+Best AUC (ROC): 0.9013229784638632
+
+Epoch 031 (TRN): 100%|| 76903/76903 [00:12<00:00, 6070.62it/s]
+Accuracy:           0.7443    0.8618    0.7622    0.7038
+Balanced Accuracy:  0.6438    0.8476    0.6319    0.6997
+Precision:          0.2405    0.4496    0.5092    0.6845
+Sensitivity/Recall: 0.5110    0.8292    0.3802    0.8000
+Specificity:        0.7766    0.8661    0.8835    0.5993
+F1 score:           0.3270    0.5830    0.4354    0.7377
+MCC:                0.2147    0.5431    0.2937    0.4087
+AUC (ROC):          0.7473    0.9333    0.7307    0.7822
+AUC (PR):           0.2450    0.5804    0.5193    0.7801
+NPV:                0.9198    0.9746    0.8177    0.7339
+Loss:               0.0362    0.0187    0.0592    0.1331
+Epoch 031 (VLD): 100%|| 19226/19226 [00:01<00:00, 11557.66it/s]
+Accuracy:           0.7705    0.9429    0.8510    0.8068
+Balanced Accuracy:  0.7840    0.9619    0.8091    0.8045
+Precision:          0.3218    0.6745    0.6780    0.7889
+Sensitivity/Recall: 0.8019    0.9866    0.7280    0.8587
+Specificity:        0.7661    0.9372    0.8901    0.7504
+F1 score:           0.4593    0.8012    0.7021    0.8223
+MCC:                0.4039    0.7883    0.6036    0.6140
+AUC (ROC):          0.8571    0.9686    0.9213    0.8983
+AUC (PR):           0.3823    0.6949    0.8165    0.9007
+NPV:                0.9655    0.9981    0.9115    0.8301
+Loss:               0.0303    0.0095    0.0383    0.1018
+
+model_stage_2.pt
+False False
+Best AUC (PR): 0.7074031684416804
+Best AUC (ROC): 0.9147726315749285
+1
+
+Label_0:
+  Test AUROC: 0.8969
+  Test Accuracy: 0.8057
+
+Label_1:
+  Test AUROC: 0.9773
+  Test Accuracy: 0.9445
+
+Label_2:
+  Test AUROC: 0.7656
+  Test Accuracy: 0.6595
+
+Label_3:
+  Test AUROC: 0.9191
+  Test Accuracy: 0.8551

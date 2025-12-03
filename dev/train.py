@@ -97,6 +97,7 @@ def parser():
     parser.add_argument('--stage_1_ckpt', type=str, help="Path to stage 1 checkpoint for stage 2 training")
     parser.add_argument("--eval_threshold", type=float, default=0.5,
                         help="Probability threshold for binarizing predictions during evaluation (default: 0.5)")
+    parser.add_argument('--freeze_backbone', action='store_true')
     args = parser.parse_args()
     return args
 
@@ -109,7 +110,8 @@ print(f"Image backbone: {args.img_net}")
 # print(f"Embedding path: {args.emb_path}")
 if args.img_net == 'None':
     args.img_net = None
-    
+
+
 
 cuda_devices = [0]
 data_parallel = False
@@ -242,10 +244,9 @@ mdl = ADRDModel(
     transfer_epoch=args.transfer_epoch,
     wandb_project=args.wandb_project,
     stage_1_ckpt=args.stage_1_ckpt,
-    eval_threshold=args.eval_threshold
+    eval_threshold=args.eval_threshold,
+    freeze_backbone = args.freeze_backbone
 )
-
-# print(dat_trn.labels)
 
 if args.img_mode == 0 or args.img_mode == 2:
     mdl.fit(dat_trn.features, dat_vld.features, dat_trn.labels, dat_vld.labels, img_train_trans=trn_filter_transform, img_vld_trans=vld_filter_transform, img_mode=args.img_mode)

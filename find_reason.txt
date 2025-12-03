@@ -207,6 +207,7 @@ Best AUC (PR): 0.7453499427166745
 Best AUC (ROC): 0.5940755208333333
 34
 
+调整阈值为0.3
 Epoch 127 (TRN): 100%|| 537/537 [00:01<00:00, 409.05it/s]
 Accuracy:           0.6685
 Balanced Accuracy:  0.5070
@@ -295,3 +296,280 @@ False False
 Best AUC (PR): 0.7436445665995919
 Best AUC (ROC): 0.5779166666666666
 110
+
+🔒 冻结Backbone
+======================================================================
+❄️  modules_emb_src 已冻结
+❄️  pe 已冻结
+❄️  transformer 已冻结
+✓ modules_cls 可训练
+
+总参数: 176,725
+可训练: 257 (0.1%)
+
+🔍 Logits分布分析 (Epoch 126)
+================================================================================
+
+Label:
+  样本数: 180
+  正类样本: 120.0 (66.7%)
+
+  Logits统计:
+    Min:    -1.1174
+    Q1:     -1.1110
+    Median: -1.0476
+    Q3:     -1.0384
+    Max:    -1.0250
+    Mean:   -1.0715
+    Std:    0.0367
+
+  概率统计 (sigmoid后):
+    Min:    0.2465
+    Median: 0.2597
+    Max:    0.2641
+    Mean:   0.2552
+
+  关键指标:
+    Logits > 0的样本: 0/180 (0.0%)
+    Probs > 0.5的样本: 0/180 (0.0%)
+
+  正类样本 (label=1):
+    Logits: mean=-1.0718, std=0.0365
+    Logits: min=-1.1170, max=-1.0250
+    Probs:  mean=0.2551
+    Logits>0: 0/120 (0.0%)
+
+  负类样本 (label=0):
+    Logits: mean=-1.0708, std=0.0370
+    Logits: min=-1.1174, max=-1.0253
+    Probs:  mean=0.2553
+
+  正负类差异:
+    Logits差: -0.0011
+    Probs差:  -0.0002
+
+  不同阈值下的Recall:
+    Logit >  -2.0: Recall=1.000, Precision=0.667, Pred_Pos=180
+    Logit >  -1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >  -0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+
+  使用概率阈值:
+    Prob > 0.3: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.4: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.6: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.7: Recall=0.000, Precision=0.000, Pred_Pos=0
+================================================================================
+
+model_stage_2.pt
+False False
+Best AUC (PR): 0.6902028524432418
+Best AUC (ROC): 0.5269444444444445
+44
+Epoch 127 (TRN): 100%|| 537/537 [00:00<00:00, 559.91it/s]
+Accuracy:           0.5624
+Balanced Accuracy:  0.4860
+Precision:          0.6581
+Sensitivity/Recall: 0.7151
+Specificity:        0.2570
+F1 score:           0.6854
+MCC:                -0.0295
+AUC (ROC):          0.4807
+AUC (PR):           0.6632
+NPV:                0.3108
+Loss:               0.4092
+Epoch 127 (VLD): 100%|| 180/180 [00:00<00:00, 814.99it/s]
+Accuracy:           0.3333
+Balanced Accuracy:  0.5000
+Precision:          ------
+Sensitivity/Recall: 0.0000
+Specificity:        1.0000
+F1 score:           ------
+MCC:                ------
+AUC (ROC):          0.5249
+AUC (PR):           0.6886
+NPV:                0.3333
+Loss:               0.7040
+
+================================================================================
+🔍 Logits分布分析 (Epoch 127)
+================================================================================
+
+Label:
+  样本数: 180
+  正类样本: 120.0 (66.7%)
+
+  Logits统计:
+    Min:    -1.1177
+    Q1:     -1.1114
+    Median: -1.0480
+    Q3:     -1.0388
+    Max:    -1.0255
+    Mean:   -1.0719
+    Std:    0.0366
+
+  概率统计 (sigmoid后):
+    Min:    0.2464
+    Median: 0.2596
+    Max:    0.2640
+    Mean:   0.2551
+
+  关键指标:
+    Logits > 0的样本: 0/180 (0.0%)
+    Probs > 0.5的样本: 0/180 (0.0%)
+
+  正类样本 (label=1):
+    Logits: mean=-1.0722, std=0.0365
+    Logits: min=-1.1173, max=-1.0255
+    Probs:  mean=0.2550
+    Logits>0: 0/120 (0.0%)
+
+  负类样本 (label=0):
+    Logits: mean=-1.0712, std=0.0370
+    Logits: min=-1.1177, max=-1.0256
+    Probs:  mean=0.2552
+
+  正负类差异:
+    Logits差: -0.0010
+    Probs差:  -0.0002
+
+  不同阈值下的Recall:
+    Logit >  -2.0: Recall=1.000, Precision=0.667, Pred_Pos=180
+    Logit >  -1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >  -0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+
+  使用概率阈值:
+    Prob > 0.3: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.4: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.6: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.7: Recall=0.000, Precision=0.000, Pred_Pos=0
+================================================================================
+
+model_stage_2.pt
+False False
+Best AUC (PR): 0.6902028524432418
+Best AUC (ROC): 0.5269444444444445
+45
+
+======================================================================
+🔒 冻结Backbone
+======================================================================
+✓ modules_emb_src 可训练
+❄️  pe 已冻结
+❄️  transformer 已冻结
+✓ modules_cls 可训练
+
+总参数: 176,725
+可训练: 77,141 (43.7%)
+Epoch 031 (TRN): 100%|| 537/537 [00:01<00:00, 392.77it/s]
+Accuracy:           0.5698
+Balanced Accuracy:  0.5056
+Precision:          0.6702
+Sensitivity/Recall: 0.6983
+Specificity:        0.3128
+F1 score:           0.6840
+MCC:                0.0114
+AUC (ROC):          0.5065
+AUC (PR):           0.6677
+NPV:                0.3415
+Loss:               0.3282
+Epoch 031 (VLD): 100%|| 180/180 [00:00<00:00, 739.87it/s]
+Accuracy:           0.3333
+Balanced Accuracy:  0.5000
+Precision:          ------
+Sensitivity/Recall: 0.0000
+Specificity:        1.0000
+F1 score:           ------
+MCC:                ------
+AUC (ROC):          0.5716
+AUC (PR):           0.7536
+NPV:                0.3333
+Loss:               0.5824
+
+================================================================================
+🔍 Logits分布分析 (Epoch 31)
+================================================================================
+
+Label:
+  样本数: 180
+  正类样本: 120.0 (66.7%)
+
+  Logits统计:
+    Min:    -1.2300
+    Q1:     -1.2110
+    Median: -1.2041
+    Q3:     -1.1957
+    Max:    -1.1814
+    Mean:   -1.2038
+    Std:    0.0103
+
+  概率统计 (sigmoid后):
+    Min:    0.2262
+    Median: 0.2307
+    Max:    0.2348
+    Mean:   0.2308
+
+  关键指标:
+    Logits > 0的样本: 0/180 (0.0%)
+    Probs > 0.5的样本: 0/180 (0.0%)
+
+  正类样本 (label=1):
+    Logits: mean=-1.2028, std=0.0103
+    Logits: min=-1.2300, max=-1.1814
+    Probs:  mean=0.2310
+    Logits>0: 0/120 (0.0%)
+
+  负类样本 (label=0):
+    Logits: mean=-1.2059, std=0.0101
+    Logits: min=-1.2275, max=-1.1902
+    Probs:  mean=0.2304
+
+  正负类差异:
+    Logits差: 0.0031
+    Probs差:  0.0005
+
+  不同阈值下的Recall:
+    Logit >  -2.0: Recall=1.000, Precision=0.667, Pred_Pos=180
+    Logit >  -1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >  -0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Logit >   1.0: Recall=0.000, Precision=0.000, Pred_Pos=0
+
+  使用概率阈值:
+    Prob > 0.3: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.4: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.5: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.6: Recall=0.000, Precision=0.000, Pred_Pos=0
+    Prob > 0.7: Recall=0.000, Precision=0.000, Pred_Pos=0
+================================================================================
+
+model_stage_2.pt
+Saving the model to ./dev/ckpt/model_stage_2_AUPR_0.pt...
+True False
+Best AUC (PR): 0.7536260167181403
+Best AUC (ROC): 0.5716666666666667
+0
+
+--- Training Set ---
+  AUROC:       0.8036
+  Accuracy:    0.6998
+  Precision:   0.5358
+  Recall:      0.7435
+  Specificity: 0.6780
+  F1 Score:    0.6228
+
+--- Test Set ---
+  AUROC:       0.6278
+  Accuracy:    0.6389
+  Precision:   0.4583
+  Recall:      0.4583
+  Specificity: 0.7292
+  F1 Score:    0.4583

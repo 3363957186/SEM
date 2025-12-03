@@ -269,11 +269,6 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         'Sample.ID',
 
         # 组织相关（可能关联病理阶段）
-        'tissue',
-        'tissue_type',
-        'tissue_ontology_term_id',
-        'Tissue',
-
         # 其他可疑列
         'is_primary_data',  # 元数据
         'development_stage',
@@ -286,7 +281,9 @@ def process_ad_metadata_with_split(input_file, test_size=0.2, random_state=42):
         'suspension_type',
         'self_reported_ethnicity',
         'self_reported_ethnicity_ontology_term_id',
-        'SORT'
+        'SORT',
+        'UMAP1',
+        'UMAP2',
     ]
 
     existing_columns_to_remove = [col for col in columns_to_remove if col in df.columns]
