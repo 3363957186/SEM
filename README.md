@@ -36,7 +36,7 @@ Follow these steps to install the package:
 ```
 conda env create -f environment.yml
 conda activate new_env
-pip install .
+pip install -e. --no-build-isolation
 ```
 
 Please note that the installation should take under 10 minutes.
